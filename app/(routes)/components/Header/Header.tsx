@@ -91,7 +91,7 @@ export function Header() {
       <div className="w-[220px] hidden desktop:flex justify-center items-center gap-x-3">
         <div className="w-8 h-8 bg-brand rounded-lg flex items-center justify-center">
           {/* <Image className="w-full h-full" src="/logo.jpg" width={32} height={32} alt="logo" /> */}
-          <span className="text-title-foreground font-bold text-sm">O</span>
+          <span className="text-title-foreground font-bold text-sm">{businessInfo.name[0]}</span>
         </div>
         <h1 className="text-lg font-bold text-title">{businessInfo.name}</h1>
       </div>

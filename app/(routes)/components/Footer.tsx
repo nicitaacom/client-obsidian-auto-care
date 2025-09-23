@@ -11,7 +11,7 @@ export function Footer() {
           {/* LOGO */}
           <div className="flex justify-center items-center gap-3">
             <div className="w-8 h-8 bg-red-600 rounded-lg flex items-center justify-center">
-              <span className="text-white font-bold text-sm">K</span>
+              <span className="text-white font-bold text-sm">{businessInfo.name[0]}</span>
             </div>
             <h1 className="text-xl font-bold text-title">{businessInfo.name}</h1>
           </div>
