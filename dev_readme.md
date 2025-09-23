@@ -7,7 +7,7 @@ Test how appointment booking system work
 Prompt
 
 ```
-UI looks minimalistic in red&black
+UI looks minimalistic in black&purple
 
 tailwind.config.ts
 

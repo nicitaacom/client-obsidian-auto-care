@@ -1,10 +1,9 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
 @layer base {
   .dark {
-    --brand: 0deg 85% 55%; /* Vibrant red */
+    --brand: 260deg 85% 65%; /* Vibrant purple */
     --background: 0deg 0% 8%; /* Deep black */
     --foreground: 0deg 0% 15%; /* Dark gray cards */
     --foreground-accent: 0deg 0% 20%; /* Slightly lighter gray */
@@ -14,7 +13,7 @@
 
     /* The same colors */
     --border-color: 0deg 0% 25%; /* Subtle borders */
-    --icon-color: 0deg 85% 55%; /* Red icons for accent */
+    --icon-color: 260deg 85% 65%; /* Purple icons for accent */
 
     /* Support colors */
     --info: 210deg 80% 65%;
@@ -24,7 +23,7 @@
   }
 
   .light {
-    --brand: 0deg 85% 50%; /* Vibrant red */
+    --brand: 260deg 85% 55%; /* Vibrant purple */
     --background: 0deg 0% 98%; /* Near white */
     --foreground: 0deg 0% 100%; /* Pure white cards */
     --foreground-accent: 0deg 0% 96%; /* Light gray accent */
@@ -34,7 +33,7 @@
 
     /* The same colors */
     --border-color: 0deg 0% 85%; /* Light borders */
-    --icon-color: 0deg 85% 50%; /* Red icons for accent */
+    --icon-color: 260deg 85% 55%; /* Purple icons for accent */
 
     /* Support colors */
     --info: 210deg 80% 55%;
@@ -43,7 +42,6 @@
     --success: 120deg 70% 45%;
   }
 }
-
 html,
 body,
 :root {
