@@ -3,6 +3,8 @@ Agreement: teseimonial
 
 This project specific TODO:
 Test how appointment booking system work
+TODO - implement sunday closed for example
+TODO - send an email as well as SMS
 
 Prompt
 

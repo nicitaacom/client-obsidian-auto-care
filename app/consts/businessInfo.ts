@@ -27,13 +27,13 @@ export const businessInfo = {
 
   // 3. Hours & service area
   businessHours: {
-    monday: { opens: "00:00", closes: "23:59" },
-    tuesday: { opens: "00:00", closes: "23:59" },
-    wednesday: { opens: "00:00", closes: "23:59" },
-    thursday: { opens: "00:00", closes: "23:59" },
-    friday: { opens: "00:00", closes: "23:59" },
-    saturday: { opens: "00:00", closes: "23:59" },
-    sunday: { opens: "00:00", closes: "23:59" },
+    monday: { opens: "17:00", closes: "22:00" },
+    tuesday: { opens: "00:00", closes: "22:00" },
+    wednesday: { opens: "00:00", closes: "22:00" },
+    thursday: { opens: "00:00", closes: "23:00" },
+    friday: { opens: "00:00", closes: "22:00" },
+    saturday: { opens: "06:00", closes: "20:00" },
+    sunday: { opens: "06:00", closes: "20:00" },
   },
   areasServed: ["Yorkshire and the Humber"],
 

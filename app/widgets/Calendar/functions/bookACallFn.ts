@@ -6,6 +6,8 @@ import { convertCurrentToTargetTimezone } from "../utils/convertCurrentToTargetT
 import { formatedDateTimeFn } from "../utils/formatedDateTimeFn"
 import { scheduleSMSNtfcnAction } from "../actions/scheduleSMSNtfcnAction"
 import { IDBAppointment } from "../types/IDBAppointment"
+import { businessInfo } from "@/consts/businessInfo"
+import { sendEmailAction } from "../actions/sendEmailAction"
 
 const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY)
 
@@ -38,6 +40,10 @@ export async function bookACallFn(sendNotificationTo?: string) {
 
   try {
     const appointmentId = crypto.randomUUID()
+    // TODO - make it universal like timestamptz intead of atMSK
+    const sendEmailResp = await sendEmailAction(message, selectedDate, atMSK, businessInfo.email, email)
+    if (typeof sendEmailResp === "string") throw Error(sendEmailResp)
+
     const response = await scheduleSMSNtfcnAction(
       message,
       selectedDate,

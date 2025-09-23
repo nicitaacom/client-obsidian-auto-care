@@ -6,6 +6,8 @@ import { IDBAppointment } from "../types/IDBAppointment"
 import { updateDBAppointmentsAction } from "../actions/updateAppointmentsAction"
 import { deleteSMSNtfcnAction } from "../actions/deleteSMSNtfcnAction"
 import { sendImmediateSMSAction } from "../actions/sendImmediateSMSAction"
+import { sendEmailAction } from "../actions/sendEmailAction"
+import { businessInfo } from "@/consts/businessInfo"
 
 export async function rescheduleAppointmentFn(id: string, sendNotificationTo?: string) {
   const { firstName, phone, email, appointmentNote } = useAppointmentStore.getState()
@@ -24,6 +26,11 @@ export async function rescheduleAppointmentFn(id: string, sendNotificationTo?: s
     if (!sendNotificationTo) throw Error("Add a business phone number - so SMS about rebooking will be send")
     // 1. Notify about rebooking with immediate SMS
     const rebookMsg = message
+
+    // TODO - make it universal like timestamptz intead of atMSK
+    const sendEmailResp = await sendEmailAction(message, selectedDate, atMSK, businessInfo.email, email)
+    if (typeof sendEmailResp === "string") throw Error(sendEmailResp)
+
     const notifyResp = await sendImmediateSMSAction(sendNotificationTo, rebookMsg)
     if (typeof notifyResp === "string" && notifyResp.includes("Failed")) throw Error(notifyResp)
 

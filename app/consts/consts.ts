@@ -94,7 +94,7 @@ Fabulous service, no hesitation in recommending them.`,
   howWeWorkTabs: [
     {
       text: "Machine Polishing",
-      iconSrc: "/how-do-we-work/tabs/polish-icon.png",
+      iconSrc: "/how-do-we-work/polish-icon.png",
       steps: [
         {
           iconSrc: "/how-do-we-work/check.png",
@@ -125,7 +125,7 @@ Fabulous service, no hesitation in recommending them.`,
     },
     {
       text: "Paint Correction",
-      iconSrc: "/how-do-we-work/tabs/paint-correction.png",
+      iconSrc: "/how-do-we-work/paint-correction.png",
       steps: [
         {
           iconSrc: "/how-do-we-work/check.png",
@@ -249,7 +249,7 @@ Fabulous service, no hesitation in recommending them.`,
     },
     {
       text: "Full Exterior Detailing",
-      iconSrc: "/how-do-we-work/tabs/exterior-wash.png",
+      iconSrc: "/how-do-we-work/exterior-wash.png",
       steps: [
         {
           iconSrc: "/how-do-we-work/check.png",

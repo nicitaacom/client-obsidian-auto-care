@@ -17,6 +17,8 @@ declare global {
       TWILIO_ACCOUNT_SID: string
       TWILIO_ACCOUNT_TOKEN: string
       TWILIO_PHONE_NUMBER: string
+
+      RESEND_SECRET: string
     }
   }
 }
