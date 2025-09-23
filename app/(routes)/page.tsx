@@ -1,5 +1,6 @@
 import { AICarService } from "../widgets/AICarService/AICarService"
 import { ContactUsForm } from "../widgets/ContactUsForm/ContactUsForm"
+import { CanvasBackground } from "./components/CanvasBackground"
 import { Footer } from "./components/Footer"
 import { Header } from "./components/Header/Header"
 import { HowDoWeWork } from "./components/HowDoWeWork"
@@ -9,7 +10,7 @@ import { Reviews } from "./components/Reviews"
 
 export default function Page() {
   return (
-    <main className="flex flex-col">
+    <CanvasBackground imgSrc="/purple-lambo.jpg" imageOpacity={90}>
       <NotificationBar />
       <Header />
       <div className="flex flex-col gap-y-12 px-2 mobile:px-4 tablet:px-8 laptop:px-16 py-12 mobile:py-16 laptop:py-24">
@@ -22,6 +23,6 @@ export default function Page() {
         <HowDoWeWork />
       </div>
       <Footer />
-    </main>
+    </CanvasBackground>
   )
 }
