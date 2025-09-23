@@ -93,95 +93,188 @@ Fabulous service, no hesitation in recommending them.`,
   // 5. How-we-work tabs (flow steps used on services pages)
   howWeWorkTabs: [
     {
-      text: "Full Valet",
-      iconSrc: "/how-do-we-work/tabs/magic.png",
+      text: "Machine Polishing",
+      iconSrc: "/how-do-we-work/tabs/polish-icon.png",
       steps: [
         {
           iconSrc: "/how-do-we-work/check.png",
-          title: "Initial Check",
-          description: "We inspect your vehicle and note areas needing special attention.",
-        },
-        {
-          iconSrc: "/how-do-we-work/exterior-wash.png",
-          title: "Exterior Wash & Wax",
-          description: "Safe exterior wash including wheels, arches, and tyre dressing.",
-        },
-        {
-          iconSrc: "/how-do-we-work/interior-detail.png",
-          title: "Interior Clean",
-          description: "Vacuum seats, carpets, and boot; clean dashboard & console.",
+          title: "Inspection",
+          description: "Assess paintwork condition and choose 1 or 2 stage polish.",
         },
         {
           iconSrc: "/how-do-we-work/polish-icon.png",
-          title: "Light Polish & Finish",
-          description: "Polish paintwork lightly and dress trims for a showroom look.",
+          title: "Polishing",
+          description: "Remove light swirls and scratches, refine surface clarity.",
         },
         {
-          iconSrc: "/how-do-we-work/100.png",
-          title: "Final Walkthrough",
-          description: "We review the valet with you to ensure 100% satisfaction.",
-        },
-      ],
-    },
-    {
-      text: "Leather Treatment",
-      iconSrc: "/how-do-we-work/tabs/interior-detail.png",
-      steps: [
-        {
-          iconSrc: "/how-do-we-work/vacuum.png",
-          title: "Leather Clean",
-          description: "Deep clean leather surfaces to remove dirt, oils, and stains.",
+          iconSrc: "/how-do-we-work/finish.png",
+          title: "Gloss Enhancement",
+          description: "Enhance depth, gloss, and paint reflection.",
         },
         {
-          iconSrc: "/how-do-we-work/shampoo.png",
-          title: "Conditioning",
-          description: "Apply high-quality conditioner to keep leather soft and supple.",
-        },
-        {
-          iconSrc: "/how-do-we-work/streeing-wheel.png",
+          iconSrc: "/how-do-we-work/shield.png",
           title: "Protection",
-          description: "UV and anti-crack protection applied to prolong leather life.",
-        },
-        {
-          iconSrc: "/how-do-we-work/vents.png",
-          title: "Matte Finish",
-          description: "Restore factory finish without a shiny or greasy look.",
+          description: "Prepare surface for wax, sealant, or ceramic coating.",
         },
         {
           iconSrc: "/how-do-we-work/perfection.png",
           title: "Final Check",
-          description: "Inspect leather surfaces and ensure perfect treatment results.",
+          description: "Ensure finish is flawless across all panels.",
         },
       ],
     },
     {
-      text: "Engine Bay Cleaning",
+      text: "Paint Correction",
+      iconSrc: "/how-do-we-work/tabs/paint-correction.png",
+      steps: [
+        {
+          iconSrc: "/how-do-we-work/check.png",
+          title: "Assessment",
+          description: "Identify deeper defects, scratches, and swirl marks.",
+        },
+        {
+          iconSrc: "/how-do-we-work/decontamination.png",
+          title: "Surface Prep",
+          description: "Decontaminate paint for a clean correction base.",
+        },
+        {
+          iconSrc: "/how-do-we-work/polish-icon.png",
+          title: "Compounding",
+          description: "Use machine compounds to remove scratches and defects.",
+        },
+        {
+          iconSrc: "/how-do-we-work/finish.png",
+          title: "Refinement",
+          description: "Polish to restore full colour depth and clarity.",
+        },
+        {
+          iconSrc: "/how-do-we-work/perfection.png",
+          title: "Final Inspection",
+          description: "Check corrected panels before moving to coating.",
+        },
+      ],
+    },
+    {
+      text: "Ceramic Coating",
+      iconSrc: "/how-do-we-work/tabs/ceramic-coating-icon.png",
+      steps: [
+        {
+          iconSrc: "/how-do-we-work/check.png",
+          title: "Preparation",
+          description: "Ensure surface is polished and corrected beforehand.",
+        },
+        {
+          iconSrc: "/how-do-we-work/shampoo.png",
+          title: "Panel Wipe",
+          description: "Remove oils and residues for coating adhesion.",
+        },
+        {
+          iconSrc: "/how-do-we-work/shield.png",
+          title: "Application",
+          description: "Apply ceramic coating evenly across all panels.",
+        },
+        {
+          iconSrc: "/how-do-we-work/time.png",
+          title: "Curing",
+          description: "Allow coating to bond and harden properly.",
+        },
+        {
+          iconSrc: "/how-do-we-work/perfection.png",
+          title: "Final Review",
+          description: "Inspect gloss, slickness, and protection coverage.",
+        },
+      ],
+    },
+    {
+      text: "Engine Cleaning",
       iconSrc: "/how-do-we-work/tabs/engine.png",
       steps: [
         {
           iconSrc: "/how-do-we-work/check.png",
-          title: "Initial Inspection",
-          description: "Assess engine bay for sensitive components and areas needing attention.",
+          title: "Inspection",
+          description: "Check engine bay and cover sensitive components.",
         },
         {
-          iconSrc: "/how-do-we-work/exterior-wash.png",
+          iconSrc: "/how-do-we-work/shampoo.png",
           title: "Degreasing",
-          description: "Apply safe degreaser to lift oil, grime, and road dirt.",
+          description: "Apply degreaser to remove oil, grime, and dirt.",
         },
         {
           iconSrc: "/how-do-we-work/interior-detail.png",
-          title: "Brushing & Agitation",
-          description: "Brush tight areas, hoses, plastics, and metal parts carefully.",
+          title: "Agitation",
+          description: "Brush plastics, hoses, and tight engine areas.",
+        },
+        {
+          iconSrc: "/how-do-we-work/exterior-wash.png",
+          title: "Rinse & Dry",
+          description: "Safe rinse or steam clean, then air/microfiber dry.",
+        },
+        {
+          iconSrc: "/how-do-we-work/shield.png",
+          title: "Dressing",
+          description: "Protect rubber and plastic with dressing.",
+        },
+      ],
+    },
+    {
+      text: "Full Interior Detailing",
+      iconSrc: "/how-do-we-work/tabs/interior-detail.png",
+      steps: [
+        {
+          iconSrc: "/how-do-we-work/vacuum.png",
+          title: "Vacuum",
+          description: "Deep vacuum of seats, carpets, mats, and boot.",
+        },
+        {
+          iconSrc: "/how-do-we-work/vents.png",
+          title: "Plastics & Vents",
+          description: "Clean dashboard, vents, and console areas.",
+        },
+        {
+          iconSrc: "/how-do-we-work/shampoo.png",
+          title: "Seats & Fabrics",
+          description: "Treat leather or fabric with cleaners and conditioners.",
+        },
+        {
+          iconSrc: "/how-do-we-work/exterior-wash.png",
+          title: "Glass",
+          description: "Clean all interior glass surfaces streak-free.",
+        },
+        {
+          iconSrc: "/how-do-we-work/perfection.png",
+          title: "Finishing Touch",
+          description: "Neutralise odours and check cabin freshness.",
+        },
+      ],
+    },
+    {
+      text: "Full Exterior Detailing",
+      iconSrc: "/how-do-we-work/tabs/exterior-wash.png",
+      steps: [
+        {
+          iconSrc: "/how-do-we-work/check.png",
+          title: "Pre-Wash",
+          description: "Foam pre-wash to loosen dirt and contaminants.",
+        },
+        {
+          iconSrc: "/how-do-we-work/exterior-wash.png",
+          title: "Hand Wash",
+          description: "Two-bucket safe wash of paintwork and wheels.",
+        },
+        {
+          iconSrc: "/how-do-we-work/decontamination.png",
+          title: "Decontamination",
+          description: "Remove iron, tar, and bonded surface contaminants.",
         },
         {
           iconSrc: "/how-do-we-work/polish-icon.png",
-          title: "Rinse & Dry",
-          description: "Low-pressure rinse or steam clean followed by drying with air/microfiber.",
+          title: "Polish & Protect",
+          description: "Polish paint and apply wax or sealant.",
         },
         {
-          iconSrc: "/how-do-we-work/100.png",
-          title: "Final Dressing",
-          description: "Apply rubber & plastic dressing for a clean, protected finish.",
+          iconSrc: "/how-do-we-work/finish.png",
+          title: "Final Finish",
+          description: "Detail trims and glass for a flawless exterior.",
         },
       ],
     },

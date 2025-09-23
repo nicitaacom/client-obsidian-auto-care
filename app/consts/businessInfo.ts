@@ -2,7 +2,7 @@
 export const businessInfo = {
   name: "Obsidian Auto Care",
   yearsInBusiness: 1, // numeric for easy usage in UI
-  yearsOfGuarantee: null, // satisfaction guarantee in years
+  yearsOfGuarantee: null, // for example guarantee for ceramic coating
   phone: "+44 795 526 56 63", // 38 41 it's her personal phone so she would like to receive SMS on 22 40
   timezone: "Europe/London",
   email: "info@obsidianautocare.com",
@@ -12,18 +12,18 @@ export const businessInfo = {
 
   // 2. Location / map
   address: {
-    street: "Pasture View, Kingswood",
-    city: "Hull",
-    county: "East Riding of Yorkshire",
-    postalCode: "HU7 3AH",
+    street: "Sheffield City Centre",
+    city: "Sheffield",
+    county: "South Yorkshire",
+    postalCode: "S1",
     country: "United Kingdom",
   },
   coordinates: {
-    latitude: 53.799588,
-    longitude: -0.347902,
+    latitude: 53.38297,
+    longitude: -1.4659,
   },
   mapUrl:
-    "https://www.google.com/maps/place/Hydrowax+Mobile+Valeting/@53.8742525,-0.4773261,13.99z/data=!4m16!1m7!3m6!1s0xa18c5587c123c57d:0x8c5c0eaee3e2766b!2sHydrowax+Mobile+Valeting!8m2!3d53.8742525!4d-0.4773261!16s%2Fg%2F11ckvg1dmb!3m7!1s0xa18c5587c123c57d:0x8c5c0eaee3e2766b!8m2!3d53.8742525!4d-0.4773261!9m1!1b1!16s%2Fg%2F11ckvg1dmb?entry=ttu",
+    "https://www.google.com/maps/place/Obsidian+Auto+Care/@53.3957166,-1.3895480999999998,13.99z/data=!4m16!1m7!3m6!1s0xabe2cdad219f7c07:0xaf6d04c16ca11c!2sObsidian+Auto+Care!8m2!3d53.3957166!4d-1.3895480999999998!16s%2Fg%2F11ckvg1dmb!3m7!1s0xabe2cdad219f7c07:0xaf6d04c16ca11c!8m2!3d53.3957166!4d-1.3895480999999998!9m1!1b1!16s%2Fg%2F11ckvg1dmb?entry=ttu",
 
   // 3. Hours & service area
   businessHours: {
