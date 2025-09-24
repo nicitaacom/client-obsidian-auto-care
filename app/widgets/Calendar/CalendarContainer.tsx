@@ -18,8 +18,6 @@ import { selectDBAppointmentsAction } from "./actions/selectAppointmentsAction"
 import { IDBAppointment } from "./types/IDBAppointment"
 import { deleteDBAppointmentAction } from "./actions/deleteDBAppointmentAction"
 
-const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY)
-
 function getCookie(name: string) {
   const value = `; ${document.cookie}`
   const parts = value.split(`; ${name}=`)
@@ -400,54 +398,134 @@ export default function CalendarContainer({
 
       <div className="grid tablet:grid-cols-2 gap-3 mb-4">
         <input
-          className="bg-background border border-border-color rounded px-3 py-2 text-title w-full"
+          className={`bg-background border rounded px-3 py-2 text-title w-full transition-colors ${
+            firstNameError
+              ? "border-danger ring-2 ring-danger/20 focus:ring-danger/30"
+              : "border-border-color focus:ring-2 focus:ring-brand/20"
+          }`}
           type="text"
           value={firstName}
+          tabIndex={1}
           onChange={e => handleFirstNameChange(e.target.value)}
           placeholder="First name"
         />
-        {firstNameError && <p className="text-danger text-sm mt-1">{firstNameError}</p>}
+
         <input
-          className="bg-background border border-border-color rounded px-3 py-2 text-title w-full"
+          className={`bg-background border rounded px-3 py-2 text-title w-full transition-colors ${
+            vehicleError
+              ? "border-danger ring-2 ring-danger/20 focus:ring-danger/30"
+              : "border-border-color focus:ring-2 focus:ring-brand/20"
+          }`}
           value={vehicle}
+          tabIndex={2}
           onChange={e => handleVehicleChange(e.target.value)}
           placeholder="Vehicle"
         />
-        {vehicleError && <p className="text-danger text-sm mt-1">{vehicleError}</p>}
       </div>
 
       <div className="grid tablet:grid-cols-2 gap-3 mb-4">
         <input
-          className="bg-background border border-border-color rounded px-3 py-2 text-title w-full"
+          className={`bg-background border rounded px-3 py-2 text-title w-full transition-colors ${
+            phoneError
+              ? "border-danger ring-2 ring-danger/20 focus:ring-danger/30"
+              : "border-border-color focus:ring-2 focus:ring-brand/20"
+          }`}
           type="tel"
           value={phone}
+          tabIndex={3}
           onChange={e => handlePhoneChange(e.target.value)}
           placeholder={phonePlaceholder}
         />
-        {phoneError && <p className="text-danger text-sm mt-1">{phoneError}</p>}
 
         <input
-          className="bg-background border border-border-color rounded px-3 py-2 w-full text-title"
+          className={`bg-background border rounded px-3 py-2 w-full text-title transition-colors ${
+            emailError
+              ? "border-danger ring-2 ring-danger/20 focus:ring-danger/30"
+              : "border-border-color focus:ring-2 focus:ring-brand/20"
+          }`}
           type="email"
           value={email}
+          tabIndex={4}
           onChange={e => setEmail(e.target.value)}
           placeholder="Email (optional)"
         />
-        {emailError && <p className="text-danger text-sm mt-1">{emailError}</p>}
       </div>
 
-      <div className="mb-3">
+      <div className="mb-4">
         <textarea
-          className="bg-background border border-border-color rounded px-3 py-2 w-full h-20 resize-none text-title"
+          className={`bg-background border rounded px-3 py-2 w-full h-20 resize-none text-title transition-colors ${
+            appointmentNoteError
+              ? "border-danger ring-2 ring-danger/20 focus:ring-danger/30"
+              : "border-border-color focus:ring-2 focus:ring-brand/20"
+          }`}
           value={appointmentNote}
+          tabIndex={5}
           onChange={e => handleAppointmentNoteChange(e.target.value)}
           placeholder={appointmentNotePlaceholder}
         />
-        {appointmentNoteError && <p className="text-danger text-sm mt-1">{appointmentNoteError}</p>}
       </div>
 
+      {/* 1. Consolidated error display section */}
+      {(firstNameError || vehicleError || phoneError || emailError || appointmentNoteError) && (
+        <motion.div
+          className="bg-danger/5 border border-danger/20 rounded-lg p-4 mb-4 space-y-2"
+          initial={{ opacity: 0, height: 0 }}
+          animate={{ opacity: 1, height: "auto" }}
+          exit={{ opacity: 0, height: 0 }}
+          transition={{ duration: 0.2 }}>
+          <div className="flex items-center gap-2 mb-3">
+            <FiAlertCircle className="text-danger flex-shrink-0" />
+            <h4 className="text-danger font-medium">Please fix the following errors:</h4>
+          </div>
+          <div className="space-y-1.5">
+            {firstNameError && (
+              <div className="flex items-start gap-2">
+                <div className="w-1.5 h-1.5 bg-danger rounded-full mt-2 flex-shrink-0" />
+                <p className="text-danger text-sm">
+                  <span className="font-medium">First name:</span> {firstNameError}
+                </p>
+              </div>
+            )}
+            {vehicleError && (
+              <div className="flex items-start gap-2">
+                <div className="w-1.5 h-1.5 bg-danger rounded-full mt-2 flex-shrink-0" />
+                <p className="text-danger text-sm">
+                  <span className="font-medium">Vehicle:</span> {vehicleError}
+                </p>
+              </div>
+            )}
+            {phoneError && (
+              <div className="flex items-start gap-2">
+                <div className="w-1.5 h-1.5 bg-danger rounded-full mt-2 flex-shrink-0" />
+                <p className="text-danger text-sm">
+                  <span className="font-medium">Phone:</span> {phoneError}
+                </p>
+              </div>
+            )}
+            {emailError && (
+              <div className="flex items-start gap-2">
+                <div className="w-1.5 h-1.5 bg-danger rounded-full mt-2 flex-shrink-0" />
+                <p className="text-danger text-sm">
+                  <span className="font-medium">Email:</span> {emailError}
+                </p>
+              </div>
+            )}
+            {appointmentNoteError && (
+              <div className="flex items-start gap-2">
+                <div className="w-1.5 h-1.5 bg-danger rounded-full mt-2 flex-shrink-0" />
+                <p className="text-danger text-sm">
+                  <span className="font-medium">Notes:</span> {appointmentNoteError}
+                </p>
+              </div>
+            )}
+          </div>
+        </motion.div>
+      )}
+
       <button
+        className="bg-brand hover:bg-brand/90 disabled:bg-brand/50 text-title-foreground px-6 py-3 rounded w-full font-medium mb-4 transition-colors"
         onClick={handleBook}
+        tabIndex={5}
         disabled={
           !selectedDate ||
           !selectedTime ||
@@ -456,8 +534,7 @@ export default function CalendarContainer({
           !!firstNameError ||
           !!phoneError ||
           !!appointmentNoteError
-        }
-        className="bg-brand hover:bg-brand/90 disabled:bg-brand/50 text-title-foreground px-6 py-3 rounded w-full font-medium mb-4">
+        }>
         {editingId ? "Update" : "Book"}
       </button>
 

@@ -17,12 +17,12 @@ function validateInputs(message: string, selectedDate: string | null, at: string
 export async function scheduleEmailNtfcnAction(
   message: string,
   selectedDate: string | null,
-  at: string,
+  appointment_at: string,
   organizatorEmail?: string,
   appointmentId?: string,
 ): Promise<void | string> {
   // 1. Validate inputs
-  const validationError = validateInputs(message, selectedDate, at, organizatorEmail)
+  const validationError = validateInputs(message, selectedDate, appointment_at, organizatorEmail)
   if (validationError) return validationError
 
   const date = Array.isArray(selectedDate) ? selectedDate[0] : selectedDate
@@ -30,7 +30,7 @@ export async function scheduleEmailNtfcnAction(
 
   // 2. Parse and validate scheduling time
   const bookingDate = moment(date).format("YYYY-MM-DD")
-  const baseTime = moment.tz(`${bookingDate} ${at}`, "Europe/Moscow").seconds(0).milliseconds(0)
+  const baseTime = moment.tz(`${bookingDate} ${appointment_at}`, "Europe/Moscow").seconds(0).milliseconds(0)
 
   if (baseTime.isBefore(moment())) return "Scheduling time is in the past"
 
@@ -64,7 +64,7 @@ export async function scheduleEmailNtfcnAction(
       '${cronSchedule}',
       $$SELECT net.http_post(
         url := '${edgeFunctionUrl}',
-        headers := '{"Authorization": "Bearer ${process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY}", "Content-Type": "application/json"}',
+        headers := '{"Authorization": "Bearer ${process.env.SUPABASE_SERVICE_ROLE_KEY}", "Content-Type": "application/json"}',
         body := '{"notificationId": "${notificationId}"}'
       )$$
     );

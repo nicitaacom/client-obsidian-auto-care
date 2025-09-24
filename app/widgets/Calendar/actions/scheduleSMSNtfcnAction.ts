@@ -3,7 +3,7 @@
 import { createClient } from "@supabase/supabase-js"
 import moment from "moment-timezone"
 
-const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!)
+const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL, process.env.SUPABASE_SERVICE_ROLE_KEY)
 
 function validatePhoneInput(message: string, selectedDate: string | null, at: string, phone?: string): string | null {
   if (!message) return "Message is required"
@@ -21,12 +21,12 @@ function buildCronSchedule(date: moment.Moment): string {
 export async function scheduleSMSNtfcnAction(
   message: string,
   selectedDate: string | null,
-  at: string,
-  sendNotificationTo?: string,
+  appointment_at: string, // ISO timestamptz
+  organizatorPhone?: string,
   appointmentId?: string,
 ): Promise<void | string> {
   // 1. Validate inputs
-  const validationError = validatePhoneInput(message, selectedDate, at, sendNotificationTo)
+  const validationError = validatePhoneInput(message, selectedDate, appointment_at, organizatorPhone)
   if (validationError) return validationError
 
   const date = Array.isArray(selectedDate) ? selectedDate[0] : selectedDate
@@ -34,7 +34,7 @@ export async function scheduleSMSNtfcnAction(
 
   // 2. Parse and validate scheduling time
   const bookingDate = moment(date).format("YYYY-MM-DD")
-  const baseTime = moment.tz(`${bookingDate} ${at}`, "Europe/Moscow").seconds(0).milliseconds(0)
+  const baseTime = moment.tz(`${bookingDate} ${appointment_at}`, "Europe/Moscow").seconds(0).milliseconds(0)
 
   if (baseTime.isBefore(moment())) return "Scheduling time is in the past"
 
@@ -44,7 +44,7 @@ export async function scheduleSMSNtfcnAction(
   const { error: insertError } = await supabase.from("sms_notifications").insert({
     id: notificationId,
     appointment_id: appointmentId,
-    phone: sendNotificationTo,
+    phone: organizatorPhone,
     message,
     scheduled_for: scheduledFor.toISOString(),
   })
@@ -66,7 +66,7 @@ export async function scheduleSMSNtfcnAction(
       '${cronSchedule}',
       $$SELECT net.http_post(
         url := '${edgeFunctionUrl}',
-        headers := '{"Authorization": "Bearer ${process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY}", "Content-Type": "application/json"}',
+        headers := '{"Authorization": "Bearer ${process.env.SUPABASE_SERVICE_ROLE_KEY}", "Content-Type": "application/json"}',
         body := '{"notificationId": "${notificationId}"}'
       )$$
     );

@@ -32,9 +32,11 @@ export default function Booking() {
         <div className="bg-foreground rounded-lg border border-border-color overflow-hidden">
           <CalendarContainer
             businessHours={businessInfo.businessHours}
-            maxBookingDaysInAdvance={28}
             businessOwnerPhone={businessInfo.phone}
+            businessOwnerEmail={businessInfo.email}
+            maxBookingDaysInAdvance={28}
             defaultTimezone={businessInfo.timezone}
+            phonePlaceholder="e.g +44 123 456 78 90"
           />
         </div>
       </div>
