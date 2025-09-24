@@ -10,8 +10,8 @@ import { FiAlertCircle, FiX } from "react-icons/fi"
 
 import { useAppointmentStore } from "./useAppointmentStore"
 import BookedAppointments from "./BookedAppointments"
-import { rescheduleAppointmentFn } from "./functions/rescheduleAppointmentFn"
-import { bookACallFn } from "./functions/bookACallFn"
+import { cancelAppointmentFn } from "./functions/cancelAppointmentFn"
+import { bookAppointmentFn } from "./functions/bookAppointmentFn"
 import { useDebounce } from "./hooks/useDebounce"
 import { validateEmail } from "./utils/validateEmailFn"
 import { selectDBAppointmentsAction } from "./actions/selectAppointmentsAction"
@@ -63,6 +63,7 @@ type CalendarContainerProps = {
   maxBookingDaysInAdvance: number
   defaultTimezone: string
   businessOwnerPhone?: string // to receive notifictions about bookings
+  businessOwnerEmail?: string // to receive notifictions about bookings
   appointmentNotePlaceholder?: string
   phonePlaceholder?: string
 }
@@ -71,6 +72,7 @@ export default function CalendarContainer({
   businessHours,
   maxBookingDaysInAdvance,
   businessOwnerPhone,
+  businessOwnerEmail,
   defaultTimezone,
   appointmentNotePlaceholder = "Appointment note (optional)",
   phonePlaceholder = "Phone",
@@ -153,8 +155,18 @@ export default function CalendarContainer({
     if (selected.isBefore(today)) return setError("Cannot book past dates")
     // 3. Book or reschedule
 
+    const appointmentId = editingId || crypto.randomUUID()
+
     if (editingId) {
-      const response = await rescheduleAppointmentFn(editingId, businessOwnerPhone)
+      const cancelAppt = await cancelAppointmentFn(
+        appointmentId,
+        defaultTimezone,
+        businessOwnerEmail,
+        businessOwnerPhone,
+      )
+      if (!cancelAppt?.ok) return
+
+      const response = await bookAppointmentFn(appointmentId, defaultTimezone, businessOwnerEmail, businessOwnerPhone)
       if (typeof response === "object") {
         setAppointments(
           appointments.map(appt =>
@@ -165,7 +177,7 @@ export default function CalendarContainer({
         resetInputs()
       }
     } else {
-      const response = await bookACallFn(businessOwnerPhone)
+      const response = await bookAppointmentFn(appointmentId, defaultTimezone, businessOwnerEmail, businessOwnerPhone)
       if (typeof response === "object") {
         setAppointments([...appointments, response])
         resetInputs()
@@ -395,7 +407,16 @@ export default function CalendarContainer({
           placeholder="First name"
         />
         {firstNameError && <p className="text-danger text-sm mt-1">{firstNameError}</p>}
+        <input
+          className="bg-background border border-border-color rounded px-3 py-2 text-title w-full"
+          value={vehicle}
+          onChange={e => handleVehicleChange(e.target.value)}
+          placeholder="Vehicle"
+        />
+        {vehicleError && <p className="text-danger text-sm mt-1">{vehicleError}</p>}
+      </div>
 
+      <div className="grid tablet:grid-cols-2 gap-3 mb-4">
         <input
           className="bg-background border border-border-color rounded px-3 py-2 text-title w-full"
           type="tel"
@@ -404,16 +425,7 @@ export default function CalendarContainer({
           placeholder={phonePlaceholder}
         />
         {phoneError && <p className="text-danger text-sm mt-1">{phoneError}</p>}
-      </div>
 
-      <div className="grid tablet:grid-cols-2 gap-3 mb-4">
-        <input
-          className="bg-background border border-border-color rounded px-3 py-2 text-title w-full"
-          value={vehicle}
-          onChange={e => handleVehicleChange(e.target.value)}
-          placeholder="Vehicle"
-        />
-        {vehicleError && <p className="text-danger text-sm mt-1">{vehicleError}</p>}
         <input
           className="bg-background border border-border-color rounded px-3 py-2 w-full text-title"
           type="email"

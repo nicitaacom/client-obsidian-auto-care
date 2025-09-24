@@ -48,12 +48,7 @@ CREATE TABLE appointments (
 
 -- 🔐 RLS Policies for Users
 ALTER TABLE appointments ENABLE ROW LEVEL SECURITY;
-
- -- Don't allow to select because it should be on server only because in that way hacker can access public supabase keys
- -- and select all then .delete .eq some selected id
-CREATE POLICY "Allow insert for everyone" ON appointments FOR INSERT WITH CHECK (true);
-CREATE POLICY "Allow update for everyone" ON appointments FOR UPDATE USING (true) WITH CHECK (true);
-CREATE POLICY "Allow delete for everyone" ON appointments FOR DELETE USING (true);
+-- It's k0n4 cuz when I delete or upadte on client with ANON it doesn't work if it's no select RLS policy
 
 
 
@@ -72,9 +67,22 @@ CREATE TABLE sms_notifications (
 
 -- 🔐 RLS Policies for Users
 ALTER TABLE sms_notifications ENABLE ROW LEVEL SECURITY;
- -- Don't allow to select because it should be on server only because in that way hacker can access public supabase keys
- -- and select all then .delete .eq some selected id
-CREATE POLICY "Allow insert for everyone" ON sms_notifications FOR INSERT WITH CHECK (true);
-CREATE POLICY "Allow update for everyone" ON sms_notifications FOR UPDATE USING (true) WITH CHECK (true);
-CREATE POLICY "Allow delete for everyone" ON sms_notifications FOR DELETE USING (true);
+-- It's k0n4 cuz when I delete or upadte on client with ANON it doesn't work if it's no select RLS policy
+
+
+
+
+CREATE TABLE email_notifications (
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  created_at timestamp with time zone DEFAULT now(),
+  email text NOT NULL,
+  appointment_id uuid NOT NULL,
+  message text NOT NULL,
+  scheduled_for timestamp with time zone NOT NULL
+);
+
+
+-- 🔐 RLS Policies for Users
+ALTER TABLE email_notifications ENABLE ROW LEVEL SECURITY;
+-- It's k0n4 cuz when I delete or upadte on client with ANON it doesn't work if it's no select RLS policy
 ```

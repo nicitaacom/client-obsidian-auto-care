@@ -3,7 +3,8 @@
 import { Resend } from "resend"
 
 export async function sendEmailAction(
-  message: string,
+  body: string,
+  subject: string,
   selectedDate: string | null,
   atMSK: string,
   emailFrom: string,
@@ -17,7 +18,7 @@ export async function sendEmailAction(
   await resend.emails.send({
     from: emailFrom,
     to: emailTo,
-    subject: `New Booking - ${selectedDate}`,
+    subject: subject,
     html: `
         <!DOCTYPE html>
         <html>
@@ -55,11 +56,11 @@ export async function sendEmailAction(
                 
              
                 ${
-                  message
+                  body
                     ? `
                 <div style="background-color: #111111; border-radius: 6px; padding: 16px; border-left: 3px solid #7c3aed;">
                   <h3 style="margin: 0 0 8px 0; font-size: 14px; font-weight: 600; color: #a855f7; text-transform: uppercase; letter-spacing: 0.5px;">Message</h3>
-                  <p style="margin: 0; color: #ffffff; font-size: 14px; line-height: 1.4;">${message}</p>
+                  <p style="margin: 0; color: #ffffff; font-size: 14px; line-height: 1.4;">${body}</p>
                 </div>
                 `
                     : ""
