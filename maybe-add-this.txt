@@ -1,0 +1,212 @@
+// 1. Define service names as const for type safety
+const SERVICE_NAMES = [
+  "1 Stage Machine Polishing",
+  "2 Stage Machine Polishing", 
+  "Paint Correction",
+  "Interior Steam Clean",
+  "Ceramic Spray Protection",
+  "Ceramic Coating Application",
+  "Engine Bay Cleaning",
+  "Deep Vacuum",
+  "Dashboard Cleaning", 
+  "Seat Treatment",
+  "Glass Cleaning",
+  "Pre-wash",
+  "Hand Wash",
+  "Wheel Deep Clean",
+  "Decontamination",
+  "Wheel Refurbishment"
+] as const
+
+// 2. Create types from the service names
+type ServiceName = typeof SERVICE_NAMES[number]
+
+interface Service {
+  name: ServiceName
+  duration: string
+  price: string
+  steps: string[]
+}
+
+interface PackageService {
+  name: ServiceName
+  isRemovable: boolean
+}
+
+interface PackageGroup {
+  groupName: string
+  selectionType: "exactly-one"
+  isRemovable: boolean
+  options: { name: ServiceName }[]
+}
+
+type PackageItem = PackageService | PackageGroup
+
+interface Package {
+  name: string
+  price: string | null
+  services: PackageItem[]
+}
+
+export const businessInfo = {
+  services: [
+    { 
+      name: "1 Stage Machine Polishing",
+      duration: "2-3 hours",
+      price: "£80-120",
+      steps: ["1 stage polishing", "Swirl removal", "Gloss enhancement"]
+    },
+    { 
+      name: "2 Stage Machine Polishing",
+      duration: "3-4 hours",
+      price: "£120-180",
+      steps: ["2 stage polishing", "Deep swirl removal", "Paint correction", "Gloss enhancement"]
+    },
+    { 
+      name: "Paint Correction",
+      duration: "4-6 hours",
+      price: "£150-250",
+      steps: ["Scratch removal", "Compounding", "Paint refinement", "Surface perfection"]
+    },
+    { 
+      name: "Interior Steam Clean",
+      duration: "1 hour",
+      price: "£25-40",
+      steps: ["Steam cleaning seats", "Dashboard sanitization", "Carpet deep clean"]
+    },
+    {
+      name: "Ceramic Spray Protection",
+      duration: "30 minutes",
+      price: "£20-35",
+      steps: ["Surface preparation", "Ceramic spray application", "Curing"]
+    },
+    {
+      name: "Ceramic Coating Application",
+      duration: "2-3 hours",
+      price: "£200-300",
+      steps: ["Surface decontamination", "Ceramic coating application", "Curing process", "Final inspection"]
+    },
+    {
+      name: "Engine Bay Cleaning",
+      duration: "1-2 hours", 
+      price: "£40-60",
+      steps: ["Degreasing", "Agitation cleaning", "Steam clean", "Dressing application"]
+    },
+    {
+      name: "Deep Vacuum",
+      duration: "45 minutes",
+      price: "£20-30",
+      steps: ["Seat vacuum", "Carpet vacuum", "Boot cleaning", "Crevice cleaning"]
+    },
+    {
+      name: "Dashboard Cleaning",
+      duration: "30 minutes",
+      price: "£15-25",
+      steps: ["Dust removal", "Plastic cleaning", "Console detailing"]
+    },
+    {
+      name: "Seat Treatment",
+      duration: "1 hour",
+      price: "£30-50",
+      steps: ["Leather conditioning", "Fabric cleaning", "Stain removal"]
+    },
+    {
+      name: "Glass Cleaning",
+      duration: "20 minutes",
+      price: "£10-15",
+      steps: ["Interior glass", "Exterior glass", "Mirror cleaning"]
+    },
+    {
+      name: "Pre-wash",
+      duration: "20 minutes",
+      price: "£10-15",
+      steps: ["Rinse down", "Foam application", "Dirt loosening"]
+    },
+    {
+      name: "Hand Wash",
+      duration: "45 minutes",
+      price: "£20-30",
+      steps: ["Two bucket method", "Panel washing", "Final rinse"]
+    },
+    {
+      name: "Wheel Deep Clean",
+      duration: "30 minutes",
+      price: "£15-25",
+      steps: ["Wheel removal", "Deep cleaning", "Arch cleaning", "Tyre dressing"]
+    },
+    {
+      name: "Decontamination",
+      duration: "1 hour",
+      price: "£40-60",
+      steps: ["Iron removal", "Tar removal", "Clay bar treatment"]
+    },
+    {
+      name: "Wheel Refurbishment",
+      duration: "2-3 hours",
+      price: "£60-100",
+      steps: ["Wheel removal", "Deep cleaning", "Polishing", "Protection application"]
+    }
+  ] satisfies Service[],
+
+  primaryPackages: [
+    {
+      name: "Paint Correction Package",
+      price: "£150-250",
+      services: [
+        { name: "Paint Correction", isRemovable: false },
+        { name: "Glass Cleaning", isRemovable: true }
+      ]
+    },
+    {
+      name: "Ceramic Coating",
+      price: "£400-600", 
+      services: [
+        { name: "Pre-wash", isRemovable: false },
+        { name: "Hand Wash", isRemovable: false },
+        { name: "Decontamination", isRemovable: false },
+        {
+          groupName: "Polishing Level",
+          selectionType: "exactly-one",
+          isRemovable: false,
+          options: [
+            { name: "1 Stage Machine Polishing" },
+            { name: "2 Stage Machine Polishing" },
+            { name: "Paint Correction" }
+          ]
+        },
+        { name: "Ceramic Coating Application", isRemovable: false },
+        { name: "Glass Cleaning", isRemovable: true }
+      ]
+    },
+    {
+      name: "Engine Cleaning",
+      price: "£40-60",
+      services: [
+        { name: "Engine Bay Cleaning", isRemovable: false }
+      ]
+    },
+    {
+      name: "Full Interior Detailing", 
+      price: "£80-120",
+      services: [
+        { name: "Deep Vacuum", isRemovable: false },
+        { name: "Dashboard Cleaning", isRemovable: false },
+        { name: "Seat Treatment", isRemovable: true },
+        { name: "Glass Cleaning", isRemovable: true },
+        { name: "Interior Steam Clean", isRemovable: true }
+      ]
+    },
+    {
+      name: "Full Exterior Detailing",
+      price: "£100-150", 
+      services: [
+        { name: "Pre-wash", isRemovable: false },
+        { name: "Hand Wash", isRemovable: false },
+        { name: "Wheel Deep Clean", isRemovable: true },
+        { name: "Decontamination", isRemovable: true },
+        { name: "1 Stage Machine Polishing", isRemovable: false },
+        { name: "Ceramic Spray Protection", isRemovable: true }
+      ]
+    }
+  ] satisfies Package[]
+}
