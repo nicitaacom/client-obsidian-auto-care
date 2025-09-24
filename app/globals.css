@@ -1,6 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
 @layer base {
   .dark {
     --brand: 260deg 85% 65%; /* Vibrant purple */
@@ -85,7 +86,7 @@ body {
 /* Firefox */
 * {
   scrollbar-width: thin;
-  scrollbar-color: #821c1c #000000;
+  scrollbar-color: hsl(var(--brand)) #000000;
 }
 
 /* Chrome, Edge, and Safari */

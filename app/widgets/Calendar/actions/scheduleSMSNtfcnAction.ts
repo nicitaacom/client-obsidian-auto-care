@@ -12,7 +12,6 @@ export async function scheduleSMSNtfcnAction(
   message: string,
   selectedDate: string | null,
   at: string,
-  channel: string,
   sendNotificationTo?: string,
   appointmentId?: string,
 ): Promise<void | string> {

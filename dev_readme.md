@@ -1,4 +1,15 @@
-This project created for "Hydrowax Mobile Valeting" business
+### Checklist (Don't remove in order to have structure when copy-past)
+
+1. Update project created for "business name"
+2. Update package.json
+3. Update logo
+4. Update favicon
+5. Update businessInfo and consts
+6. Update .env.local
+
+---
+
+This project created for "obsidian auto car" business
 Agreement: teseimonial
 
 This project specific TODO:

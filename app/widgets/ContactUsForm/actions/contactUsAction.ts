@@ -21,7 +21,6 @@ export async function contactUsAction(firstName: string, phone: string, message:
   const resend = new Resend(process.env.RESEND_SECRET)
 
   try {
-    // 3. Send email
     await resend.emails.send({
       from: businessInfo.email,
       to: businessInfo.email,
@@ -86,7 +85,10 @@ export async function contactUsAction(firstName: string, phone: string, message:
         </html>
       `,
     })
-
+  } catch (error) {
+    if (error instanceof Error) return error.message
+  }
+  try {
     // 4. Send SMS
     await client.messages.create({
       body: `${firstName} want ${message}`,

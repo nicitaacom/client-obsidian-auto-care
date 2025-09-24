@@ -11,6 +11,7 @@ export const businessInfo = {
   cta: "Contact us - get response in 2mins",
 
   // 2. Location / map
+  areasServed: ["Yorkshire and the Humber"],
   address: {
     street: "Sheffield City Centre",
     city: "Sheffield",
@@ -35,9 +36,26 @@ export const businessInfo = {
     saturday: { opens: "06:00", closes: "20:00" },
     sunday: { opens: "06:00", closes: "20:00" },
   },
-  areasServed: ["Yorkshire and the Humber"],
 
-  // 4. High-level services (used for meta / schema)
+  // 4. socials & business meta
+  yellPagesUrl: "https://www.yell.com/biz/obsidian-autocare-rotherham-10929051//",
+  facebookUrl: "https://www.facebook.com/people/Obsidian-Autocare/61567347456713/#",
+  instagramUrl: "https://www.instagram.com/obsidian_autocare/",
+  foundingYear: 2025,
+  founders: ["Kallin"],
+  priceRange: "££",
+  guarantee: "Satisfaction Guarantee - If you’re not 100% satisfied, I’ll make it right before you leave.",
+
+  // 6. Rating info (numbers, ready for structured data)
+  rating: {
+    average: 5,
+    count: 25,
+    googleMaps: 5,
+    yelp: 5,
+    max: 5,
+  },
+
+  // 4. High-level services/packages (used for meta / schema)
   primaryServices: [
     {
       name: "Machine Polishing",
@@ -97,22 +115,4 @@ export const businessInfo = {
       ],
     },
   ],
-
-  // 5. socials & business meta
-  yellPagesUrl: "https://www.yell.com/biz/obsidian-autocare-rotherham-10929051//",
-  facebookUrl: "https://www.facebook.com/people/Obsidian-Autocare/61567347456713/#",
-  instagramUrl: "https://www.instagram.com/obsidian_autocare/",
-  foundingYear: 2025,
-  founders: ["Kallin"],
-  priceRange: "££",
-  guarantee: "Satisfaction Guarantee - If you’re not 100% satisfied, I’ll make it right before you leave.",
-
-  // 6. Rating info (numbers, ready for structured data)
-  rating: {
-    average: 5,
-    count: 25,
-    googleMaps: 5,
-    yelp: 5,
-    max: 5,
-  },
 }

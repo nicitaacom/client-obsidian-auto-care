@@ -41,9 +41,7 @@ CREATE TABLE appointments (
   first_name VARCHAR(32) NOT NULL,
   phone VARCHAR(32) NOT NULL,
   email VARCHAR(64) NULL,
-  channel VARCHAR(50) NOT NULL,
   note TEXT,
-  notification_to VARCHAR(255),
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 

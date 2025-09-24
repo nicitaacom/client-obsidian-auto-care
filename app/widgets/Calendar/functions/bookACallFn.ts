@@ -12,17 +12,10 @@ import { sendEmailAction } from "../actions/sendEmailAction"
 const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY)
 
 export async function bookACallFn(sendNotificationTo?: string) {
-  const {
-    // sendNotificationTo,
-    inputNotificationTo,
-    channel,
-    userId,
-    selectedDate,
-    selectedTime,
-    selectedTimezone,
-  } = useAppointmentStore.getState()
+  const { userId } = useAppointmentStore.getState()
   const { setNextStep, setError } = useAppointmentStore.getState()
-  const { firstName, email, phone, appointmentNote } = useAppointmentStore.getState()
+  const { selectedDate, selectedTime, selectedTimezone } = useAppointmentStore.getState()
+  const { firstName, vehicle, email, phone, appointmentNote } = useAppointmentStore.getState()
 
   // 1. Validate date is not in the past
   const selected = moment(selectedDate).startOf("day")
@@ -31,31 +24,24 @@ export async function bookACallFn(sendNotificationTo?: string) {
 
   const atMSK = convertCurrentToTargetTimezone(selectedTime, selectedTimezone, "Europe/Moscow")
 
-  let message = formatedDateTimeFn(true)
-  inputNotificationTo.length > 3
-    ? (message += `Send notification to ${sendNotificationTo}: ${inputNotificationTo}\n`)
-    : null
-  appointmentNote.length > 3 ? (message += `Appointment note: ${appointmentNote}\n`) : null
-  message += `Where: ${channel === "google-meets" ? '<a href="https://meet.google.com/yiy-pbnd-ygo?pli=1">google-meets</a>' : channel}\n`
-
   try {
+    if (!selectedDate) throw Error("It's no selected date")
+    if (!selectedTime) throw Error("It's no selected time")
+
+    let message = formatedDateTimeFn(true, selectedDate, selectedTime, selectedTimezone)
+    message += `Vehicle: ${vehicle}`
+    message += `First name: ${firstName}`
+    email?.length && email.length > 4 ? `Email: ${email}` : null
+    message += `Phone: ${phone}`
+    appointmentNote.length > 3 ? (message += `Appointment note: ${appointmentNote}\n`) : null
+
     const appointmentId = crypto.randomUUID()
     // TODO - make it universal like timestamptz intead of atMSK
     const sendEmailResp = await sendEmailAction(message, selectedDate, atMSK, businessInfo.email, email)
     if (typeof sendEmailResp === "string") throw Error(sendEmailResp)
 
-    const response = await scheduleSMSNtfcnAction(
-      message,
-      selectedDate,
-      atMSK,
-      channel,
-      sendNotificationTo,
-      appointmentId,
-    )
+    const response = await scheduleSMSNtfcnAction(message, selectedDate, atMSK, sendNotificationTo, appointmentId)
     if (typeof response === "string") throw Error(response)
-
-    if (!selectedDate) throw Error("It's no selected date")
-    if (!selectedTime) throw Error("It's no selected time")
 
     const appointmentObj: IDBAppointment = {
       id: appointmentId,
@@ -68,8 +54,6 @@ export async function bookACallFn(sendNotificationTo?: string) {
       email: email,
       phone: phone,
       note: appointmentNote,
-      channel,
-      notification_to: inputNotificationTo,
     }
 
     const { data, error } = await supabase.from("appointments").insert(appointmentObj)

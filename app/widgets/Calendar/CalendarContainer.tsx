@@ -47,7 +47,7 @@ function generateAvailableTimes(businessHours: BusinessHours, bookedTimes: momen
     let slot = moment(`${day.format("YYYY-MM-DD")} ${opens}`)
     const closeSlot = moment(`${day.format("YYYY-MM-DD")} ${closes}`)
     while (slot.isBefore(closeSlot)) {
-      !bookedTimes.some(b => b.isSame(slot)) && times.push(slot.clone())
+      !bookedTimes?.some(b => b.isSame(slot)) && times.push(slot.clone())
       slot.add(30, "minutes")
     }
   }
@@ -72,22 +72,23 @@ export default function CalendarContainer({
   maxBookingDaysInAdvance,
   businessOwnerPhone,
   defaultTimezone,
-  appointmentNotePlaceholder = "Appointment note",
+  appointmentNotePlaceholder = "Appointment note (optional)",
   phonePlaceholder = "Phone",
 }: CalendarContainerProps) {
   const { firstName, setFirstName, firstNameError, setFirstNameError } = useAppointmentStore()
   const { phone, setPhone, phoneError, setPhoneError } = useAppointmentStore()
+  const { email, setEmail, emailError, setEmailError } = useAppointmentStore()
+  const { vehicle, setVehicle, vehicleError, setVehicleError } = useAppointmentStore()
   const { appointmentNote, setAppointmentNote, appointmentNoteError, setAppointmentNoteError } = useAppointmentStore()
   const { editingId, appointments, error, setEditingId, setAppointments, setError, setUserId, resetInputs } =
     useAppointmentStore()
-  const { selectedDate, setSelectedDate, selectedTime, setSelectedTime, email, setEmail, emailError, setEmailError } =
-    useAppointmentStore()
+  const { selectedDate, setSelectedDate, selectedTime, setSelectedTime } = useAppointmentStore()
 
   moment.tz.setDefault(defaultTimezone ?? "Europe/London")
 
   const availableTimes = generateAvailableTimes(
     businessHours,
-    appointments.map(appt => moment.tz(`${appt.date} ${appt.time}`, "YYYY-MM-DD HH:mm", appt.timezone)),
+    appointments?.map(appt => moment.tz(`${appt.date} ${appt.time}`, "YYYY-MM-DD HH:mm", appt.timezone)),
     maxBookingDaysInAdvance,
   )
 
@@ -117,6 +118,9 @@ export default function CalendarContainer({
   const validatePhone = (phone: string) =>
     /^\+?[0-9 ]{0,16}$/.test(phone) ? "" : "Phone must be 17 chars max, numbers, spaces and + only"
 
+  const validateVehicle = (name: string) =>
+    /^[a-zA-Z0-9-]{0,32}$/.test(name) ? "" : "Vehicle must be 32 chars max, letters, digits, and '-' only"
+
   // 3. Handle input changes with validation
   const handleFirstNameChange = (value: string) => {
     setFirstName(value)
@@ -126,6 +130,11 @@ export default function CalendarContainer({
   const handlePhoneChange = (value: string) => {
     setPhone(value)
     setPhoneError(validatePhone(value))
+  }
+
+  const handleVehicleChange = (value: string) => {
+    setVehicle(value)
+    setVehicleError(validateVehicle(value))
   }
 
   const handleAppointmentNoteChange = (value: string) => {
@@ -234,75 +243,91 @@ export default function CalendarContainer({
       )}
 
       <style>{`
-        .react-calendar {
-          background: hsl(var(--background)) !important;
-          color: hsl(var(--title)) !important;
-          border: 1px solid hsl(var(--border-color) / 0.3) !important;
-          border-radius: 8px !important;
-          padding: 16px !important;
-          width: 100% !important;
-        }
-        .react-calendar__navigation {
-          margin-bottom: 16px;
-          background: hsl(var(--foreground-accent)) !important;
-          border-radius: 6px;
-          padding: 8px;
-        }
-        .react-calendar__navigation button {
-          min-width: 32px;
-          height: 32px;
-          border: none;
-          background: transparent !important;
-          color: hsl(var(--brand)) !important;
-          border-radius: 4px;
-          cursor: pointer;
-        }
-        .react-calendar__navigation button:hover {
-          background: hsl(var(--brand) / 0.1) !important;
-        }
-        .react-calendar__navigation__label {
-          font-weight: 600;
-          color: hsl(var(--title));
-          pointer-events: none !important;
-        }
-        .react-calendar__month-view__weekdays {
-          font-size: 12px;
-          color: hsl(var(--subTitle));
-          margin-bottom: 8px;
-        }
-        .react-calendar__month-view__days {
-          display: grid !important;
-          grid-template-columns: repeat(7, 1fr) !important;
-          gap: 2px !important;
-        }
-        .react-calendar__tile {
-          background: hsl(var(--background)) !important;
-          color: hsl(var(--title));
-          border: 1px solid hsl(var(--border-color) / 0.2) !important;
-          border-radius: 4px !important;
-          aspect-ratio: 1;
-          font-size: 14px;
-          display: flex !important;
-          align-items: center !important;
-          justify-content: center !important;
-        }
-        .react-calendar__tile:hover {
-          background: hsl(var(--brand) / 0.1) !important;
-        }
-        .react-calendar__tile--active {
-          background: hsl(var(--brand)) !important;
-          color: hsl(var(--title-foreground)) !important;
-        }
-        .react-calendar__tile--active:hover {
-          background: hsl(var(--brand)) !important;
-          color: hsl(var(--title-foreground)) !important;
-        }
-        .react-calendar__tile:disabled {
-          background: hsl(var(--foreground) / 0.5) !important;
-          color: hsl(var(--subTitle) / 0.4) !important;
-          pointer-events: none;
-        }
-      `}</style>
+      .react-calendar {
+        background: hsl(var(--background)) !important;
+        color: hsl(var(--title)) !important;
+        border: 1px solid hsl(var(--border-color) / 0.3) !important;
+        border-radius: 8px !important;
+        padding: 16px !important;
+        width: 100% !important;
+      }
+      .react-calendar__navigation {
+        margin-bottom: 16px;
+        background: hsl(var(--foreground-accent)) !important;
+        border-radius: 6px;
+        padding: 8px;
+      }
+      .react-calendar__navigation button {
+        min-width: 32px;
+        height: 32px;
+        border: none;
+        background: transparent !important;
+        color: hsl(var(--brand)) !important;
+        border-radius: 4px;
+        cursor: pointer;
+      }
+      .react-calendar__navigation button:hover {
+        background: hsl(var(--brand) / 0.1) !important;
+      }
+      .react-calendar__navigation__label {
+        font-weight: 600;
+        color: hsl(var(--title));
+        pointer-events: none !important;
+      }
+      .react-calendar__month-view__weekdays {
+        font-size: 12px;
+        color: hsl(var(--subTitle));
+        margin-bottom: 8px;
+      }
+      .react-calendar__month-view__days {
+        display: grid !important;
+        grid-template-columns: repeat(7, 1fr) !important;
+        gap: 2px !important;
+      }
+      .react-calendar__tile {
+        background: hsl(var(--background)) !important;
+        color: hsl(var(--title));
+        border: 1px solid hsl(var(--border-color) / 0.2) !important;
+        border-radius: 4px !important;
+        aspect-ratio: 1;
+        font-size: 14px;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+      }
+      .react-calendar__tile:hover {
+        background: hsl(var(--brand) / 0.1) !important;
+      }
+      .react-calendar__tile--active {
+        background: hsl(var(--brand)) !important;
+        color: hsl(var(--title-foreground)) !important;
+      }
+      .react-calendar__tile--active:hover {
+        background: hsl(var(--brand)) !important;
+        color: hsl(var(--title-foreground)) !important;
+      }
+      .react-calendar__tile:disabled {
+        background: hsl(var(--foreground) / 0.5) !important;
+        color: hsl(var(--subTitle) / 0.4) !important;
+        pointer-events: none;
+      }
+      
+      /* Custom scrollbar styling */
+      .times-scroll::-webkit-scrollbar {
+        width: 8px;
+      }
+      .times-scroll::-webkit-scrollbar-track {
+        background: hsl(var(--background));
+        border-radius: 4px;
+      }
+      .times-scroll::-webkit-scrollbar-thumb {
+        background: hsl(var(--brand));
+        border-radius: 4px;
+      }
+      .times-scroll::-webkit-scrollbar-thumb:hover {
+        background: hsl(var(--brand) / 0.8);
+      }
+    `}</style>
 
       <div className="grid laptop:grid-cols-2 gap-6 mb-6">
         <Calendar
@@ -328,12 +353,12 @@ export default function CalendarContainer({
           formatMonthYear={(locale, date) => moment(date).format("MMM YYYY")}
         />
 
-        <div className="flex flex-col">
+        <div className="flex flex-col h-[398px]">
           <p className="text-subTitle mb-3">{selectedDate ? "Available times" : "Select a date"}</p>
-          <div className="flex-1 min-h-[320px]">
+          <div className="flex-1 overflow-hidden">
             {selectedDate ? (
               filteredTimes.length ? (
-                <div className="grid grid-cols-3 gap-2 h-full overflow-y-auto pr-2 content-start">
+                <div className="grid grid-cols-3 gap-2 h-full overflow-y-auto pr-2 content-start times-scroll">
                   {filteredTimes.map(time => (
                     <button
                       key={time.format()}
@@ -362,29 +387,33 @@ export default function CalendarContainer({
       </div>
 
       <div className="grid tablet:grid-cols-2 gap-3 mb-4">
-        <div>
-          <input
-            className="bg-background border border-border-color rounded px-3 py-2 text-title w-full"
-            type="text"
-            value={firstName}
-            onChange={e => handleFirstNameChange(e.target.value)}
-            placeholder="First name"
-          />
-          {firstNameError && <p className="text-danger text-sm mt-1">{firstNameError}</p>}
-        </div>
-        <div>
-          <input
-            className="bg-background border border-border-color rounded px-3 py-2 text-title w-full"
-            type="tel"
-            value={phone}
-            onChange={e => handlePhoneChange(e.target.value)}
-            placeholder={phonePlaceholder}
-          />
-          {phoneError && <p className="text-danger text-sm mt-1">{phoneError}</p>}
-        </div>
+        <input
+          className="bg-background border border-border-color rounded px-3 py-2 text-title w-full"
+          type="text"
+          value={firstName}
+          onChange={e => handleFirstNameChange(e.target.value)}
+          placeholder="First name"
+        />
+        {firstNameError && <p className="text-danger text-sm mt-1">{firstNameError}</p>}
+
+        <input
+          className="bg-background border border-border-color rounded px-3 py-2 text-title w-full"
+          type="tel"
+          value={phone}
+          onChange={e => handlePhoneChange(e.target.value)}
+          placeholder={phonePlaceholder}
+        />
+        {phoneError && <p className="text-danger text-sm mt-1">{phoneError}</p>}
       </div>
 
-      <div className="mb-3">
+      <div className="grid tablet:grid-cols-2 gap-3 mb-4">
+        <input
+          className="bg-background border border-border-color rounded px-3 py-2 text-title w-full"
+          value={vehicle}
+          onChange={e => handleVehicleChange(e.target.value)}
+          placeholder="Vehicle"
+        />
+        {vehicleError && <p className="text-danger text-sm mt-1">{vehicleError}</p>}
         <input
           className="bg-background border border-border-color rounded px-3 py-2 w-full text-title"
           type="email"
