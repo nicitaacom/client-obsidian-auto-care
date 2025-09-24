@@ -14,7 +14,7 @@ function OurService({ className, imgSrc, altText, text }: SocialItemProps) {
   return (
     <li
       className={twMerge(
-        "group bg-foreground-accent hover:bg-red-900/20 rounded-xl overflow-hidden transition-all duration-300 hover:scale-[1.02]",
+        "group bg-foreground-accent hover:bg-brand/20 rounded-xl overflow-hidden transition-all duration-300 hover:scale-[1.02]",
         className,
       )}>
       <div className="relative overflow-hidden">
@@ -36,9 +36,9 @@ function OurService({ className, imgSrc, altText, text }: SocialItemProps) {
 
 export function HowWeCanHelpYou() {
   return (
-    <div className="w-full desktop:max-w-[50vw] bg-foreground rounded-xl border border-red-900/20 flex flex-col gap-y-4 p-6">
+    <div className="w-full desktop:max-w-[50vw] bg-foreground rounded-xl border border-brand/20 flex flex-col gap-y-4 p-6">
       <div className="flex items-center gap-3">
-        <div className="w-1 h-8 bg-red-600 rounded-full" />
+        <div className="w-1 h-8 bg-brand rounded-full" />
         <h2 className="text-2xl font-bold text-title">How we can help you?</h2>
       </div>
       <ul className="grid grid-cols-2 laptop:grid-cols-3 gap-3">

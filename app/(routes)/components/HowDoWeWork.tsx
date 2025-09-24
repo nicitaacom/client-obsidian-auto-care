@@ -22,8 +22,8 @@ function Tab({
       onClick={() => onClick(buttonText)}
       className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium text-sm uppercase transition-all duration-200 border ${
         isSelected
-          ? "bg-red-600 text-white border-red-600 shadow-lg"
-          : "bg-foreground-accent text-subTitle border-red-900/20 hover:border-red-600/50 hover:text-title"
+          ? "bg-brand text-white border-brand/60 shadow-lg"
+          : "bg-foreground-accent text-subTitle border-brand/20 hover:border-brand/50 hover:text-title"
       }`}>
       {buttonText}
       <Image
@@ -44,9 +44,9 @@ export function HowDoWeWork() {
   const selectedTabContent = consts.howWeWorkTabs.find(tab => tab.text === selectedTab)
 
   return (
-    <div className="bg-foreground rounded-xl border border-red-900/20 p-6">
+    <div className="bg-foreground rounded-xl border border-brand/20 p-6">
       <div className="flex items-center gap-3 mb-6">
-        <div className="w-1 h-8 bg-red-600 rounded-full" />
+        <div className="w-1 h-8 bg-brand rounded-full" />
         <h3 className="text-2xl text-title">
           How do we <span className="font-bold">work?</span>
         </h3>
@@ -66,14 +66,14 @@ export function HowDoWeWork() {
         <div className="grid gap-4 laptop:grid-cols-2 desktop:grid-cols-3">
           {selectedTabContent.steps.map((step, index) => (
             <div
-              className="bg-foreground-accent hover:bg-red-900/10 rounded-xl border border-red-900/20 p-4 transition-all duration-200 hover:border-red-600/30"
+              className="bg-foreground-accent hover:bg-rbrand/10 rounded-xl border p-4 duration-200 border-brand/20 hover:border-brand/30"
               key={`step-${index}`}>
               <div className="flex items-center gap-3 mb-3">
-                <div className="w-8 h-8 bg-red-600/20 rounded-lg flex items-center justify-center">
+                <div className="w-8 h-8 bg-brand/20 rounded-lg flex items-center justify-center">
                   {step.iconSrc && step.iconSrc !== "/" ? (
                     <Image className="w-5 h-5" src={step.iconSrc} alt={step.title} width={20} height={20} />
                   ) : (
-                    <span className="text-red-600 font-bold text-sm">{index + 1}</span>
+                    <span className="text-brand font-bold text-sm">{index + 1}</span>
                   )}
                 </div>
                 <h5 className="font-bold text-title">{step.title}</h5>

@@ -5,12 +5,12 @@ import { formatPhoneNumber } from "../utils/formatPhoneNumber"
 
 export function Footer() {
   return (
-    <footer className="bg-foreground-accent border-t border-brand-900/30 px-6 py-8">
+    <footer className="bg-foreground-accent border-t border-brand/30 px-6 py-8">
       <div className="flex flex-col laptop:flex-row justify-between items-center gap-8">
         <div className="flex flex-col laptop:flex-row gap-8 laptop:gap-16">
           {/* LOGO */}
           <div className="flex justify-center items-center gap-3">
-            <div className="w-8 h-8 bg-red-600 rounded-lg flex items-center justify-center">
+            <div className="w-8 h-8 bg-brand rounded-lg flex items-center justify-center">
               <span className="text-white font-bold text-sm">{businessInfo.name[0]}</span>
             </div>
             <h1 className="text-xl font-bold text-title">{businessInfo.name}</h1>
@@ -24,7 +24,7 @@ export function Footer() {
             <p>
               Sat-Sun: {businessInfo.businessHours.saturday.opens} - {businessInfo.businessHours.sunday.closes}
             </p>
-            <p className="text-brand-400">Need 24/7? - call {businessInfo.phone}</p>
+            <p className="text-brand">Need 24/7? - call {businessInfo.phone}</p>
           </div>
         </div>
 
