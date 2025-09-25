@@ -116,3 +116,72 @@ export const businessInfo = {
     },
   ],
 }
+
+/*
+
+
+when client book an appointment with you where would you like to receive notification?
+Email or SMS?
+
+Answer: 
+
+-------------------------------
+
+when client fills out "Contact us" form where would you like to receive notification?
+Email or SMS?
+
+Answer: 
+
+
+-------------------------------
+
+ what style/design would you like to be on your website?
+ for example we I did 1 website for client in ghost style for other client in black and purple minimalistic design
+ so maybe you have some assotiation with your business? like maybe some your favorite animal or favorite number?
+ or maybe you saw website somewhere and you want something similar
+
+take some impression from here: (use search)
+https://dribbble.com/
+https://mobbin.com/discover/sites/latest
+https://iwash-uk.booking.getautomate.io/packages?category=635b521f7cadec879afcd6988154e99b
+
+
+Answer: same
+
+
+-------------------------------
+
+
+what colours would you like on your website? e.g red&black
+
+Answer: black&white&purple
+
+
+
+-------------------------------
+
+
+what fetures would you like to see on your website? e.g repuration-management + appointment-booking + before-after images
+
+Answer: appointment-booking - repuration-management - before-after images
+
+
+
+
+-------------------------------
+
+are you providing 24/7 service?
+e.g emergency call
+
+Answer: no
+
+If yes - remove that "Need 24/7?" from footer
+
+
+-------------------------------
+
+
+should I add some additional section with examples of your work or should I keep it as is?
+
+Answer: 
+*/
