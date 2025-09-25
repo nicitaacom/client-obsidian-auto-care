@@ -1,11 +1,15 @@
 ### Checklist (Don't remove in order to have structure when copy-past)
 
 1. Update project created for "business name"
-2. Update package.json
-3. Update logo
-4. Update favicon
-5. Update businessInfo and consts
-6. Update .env.local
+2. Update robots.ts and sitemap.ts (if needed)
+3. Update opengraph-image (create using photopea - save .psd as well)
+4. Update package.json
+5. Update logo
+6. Update favicon
+7. Update `css` and `UI` using AI according to design that client wants
+8. Update businessInfo and consts
+9. Update `contactUsAction` (with html) and `bookAppointmentFn` and `cancelAppointmentFn` - receive notification SMS or Email or both?
+10. Update .env.local
 
 ### Execute this SQL and execute edge functions and update code (if it's SMS or email only)
 
@@ -38,6 +42,10 @@ DO $$ BEGIN
     ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON SEQUENCES TO authenticated;
   END IF;
 END $$;
+
+
+```
+
 ---
 
 This project created for "obsidian auto car" business
@@ -56,7 +64,7 @@ UI looks minimalistic in black&purple
 
 tailwind.config.ts
 
-````
+```
 
 Note: widgets it's something that you can copy paste and then adjust
 
@@ -127,7 +135,7 @@ Deno.serve(async req => {
     headers: { "Content-Type": "application/json" },
   })
 })
-````
+```
 
 sms-reminder
 
