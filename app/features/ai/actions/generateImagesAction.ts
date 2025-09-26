@@ -8,14 +8,14 @@ export async function generateImagesAction(carModel: string, recommendation: str
     if (!carModel || !recommendation) return "Car model and recommendation are required"
 
     // 1. "Before" prompt - dirty car in professional detailing shop
-    const beforePrompt = `Professional automotive detailing shop interior with black walls and subtle red LED lighting in background.
+    const beforePrompt = `Professional automotive detailing shop interior with black walls and subtle purple LED lighting in background.
     A ${carModel} car positioned in center that needs detailing service. The car should look dirty, dusty, with water spots,
     swirl marks on paint, dirty wheels, and slightly worn appearance. Shot with professional camera, shallow depth of field,
     blurred background with red accent lighting creating atmospheric mood. Dark, moody lighting with focused illumination on
     the vehicle. Realistic photography style, high quality, cinematic composition.`
 
     // 2. "After" prompt - pristine car in same professional setup
-    const afterPrompt = `Professional automotive detailing shop interior with black walls and subtle red LED lighting in background.
+    const afterPrompt = `Professional automotive detailing shop interior with black walls and subtle purple LED lighting in background.
     A ${carModel} car positioned in center after professional detailing service. The car should look absolutely pristine with
     mirror-like paint finish, spotless chrome, perfectly clean wheels with tire shine, crystal clear windows. Show the results
     of: ${recommendation}. Shot with professional camera, shallow depth of field, blurred background with red accent lighting

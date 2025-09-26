@@ -349,7 +349,7 @@ export function AICarService() {
         {step === 3 && (
           <motion.div
             key="step3"
-            className="bg-foreground rounded-md p-4 border border-border-color"
+            className="bg-foreground rounded-md p-4 border border-border-color flex flex-col h-[90vh]"
             variants={stepVariants}
             custom={direction}
             initial="hidden"
@@ -359,20 +359,34 @@ export function AICarService() {
               <FiImage className="text-brand text-lg" />
               <h3 className="text-lg tablet:text-xl font-semibold text-title">Step 3: Service Preview</h3>
             </div>
-            <motion.div variants={itemVariants}>
+            <motion.div variants={itemVariants} className="flex flex-col flex-1">
               <h4 className="text-base tablet:text-lg font-medium text-title mb-1">Before / After</h4>
               <motion.div
-                className="bg-background rounded-md overflow-hidden border border-border-color h-48 tablet:h-64 laptop:h-72"
+                className="bg-background rounded-md overflow-hidden border border-border-color flex-1"
                 variants={imageVariants}
                 whileHover={{ scale: 1.02 }}
                 transition={{ duration: 0.26 }}>
                 {beforeImage && afterImage ? (
                   <ReactCompareSlider
-                    itemOne={<ReactCompareSliderImage src={beforeImage} alt="Before detailing service" />}
-                    itemTwo={<ReactCompareSliderImage src={afterImage} alt="After detailing service" />}
+                    itemOne={
+                      <ReactCompareSliderImage
+                        className="object-contain object-center"
+                        src={beforeImage}
+                        alt="Before detailing service"
+                      />
+                    }
+                    itemTwo={
+                      <ReactCompareSliderImage
+                        className="object-contain object-center"
+                        src={afterImage}
+                        alt="After detailing service"
+                      />
+                    }
                   />
                 ) : (
-                  <div className="text-subTitle flex items-center justify-center h-full">No preview available</div>
+                  <div className="text-subTitle flex items-center justify-center h-full">
+                    <span>No preview available</span>
+                  </div>
                 )}
               </motion.div>
             </motion.div>

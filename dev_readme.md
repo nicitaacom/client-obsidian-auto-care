@@ -9,7 +9,8 @@
 7. Update `css` and `UI` using AI according to design that client wants
 8. Update businessInfo and consts
 9. Update `contactUsAction` (with html) and `bookAppointmentFn` and `cancelAppointmentFn` - receive notification SMS or Email or both?
-10. Update .env.local
+10. Update prompt in `generateImagesAction` to generate images in proper style
+11. Update .env.local
 
 ### Execute this SQL and execute edge functions and update code (if it's SMS or email only)
 
