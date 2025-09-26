@@ -93,3 +93,147 @@ CREATE TABLE email_notifications (
 ALTER TABLE email_notifications ENABLE ROW LEVEL SECURITY;
 -- It's k0n4 cuz when I delete or upadte on client with ANON it doesn't work if it's no select RLS policy
 ```
+
+### Supabase edge function `email-reminder`
+
+```ts
+import "jsr:@supabase/functions-js/edge-runtime.d.ts"
+import { createClient } from "jsr:@supabase/supabase-js@2"
+import { Resend } from "npm:resend"
+
+console.info("email reminder started")
+
+Deno.serve(async req => {
+  // 1. Initialize Supabase client with service role
+  const supabaseUrl = Deno.env.get("SUPABASE_URL")
+  const supabaseKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")
+  if (!supabaseUrl || !supabaseKey) return new Response("Missing Supabase credentials", { status: 500 })
+  const supabase = createClient(supabaseUrl, supabaseKey)
+
+  // 2. Get Resend credentials
+  const resendSecret = Deno.env.get("RESEND_SECRET")
+  if (!resendSecret) return new Response("Missing Resend credentials", { status: 500 })
+
+  const resend = new Resend(resendSecret)
+
+  // 3. Find notifications
+  const now = new Date()
+  const inThirtyMinutes = new Date(now.getTime() + 30 * 60 * 1000)
+
+  const { data, error } = await supabase
+    .from("email_notifications")
+    .select("id, email, message")
+    .lte("scheduled_for", inThirtyMinutes.toISOString())
+    .gte("scheduled_for", now.toISOString())
+
+  if (error) {
+    console.error("Supabase query error:", error)
+    return new Response("Failed to fetch notifications", { status: 500 })
+  }
+
+  if (!data?.length) {
+    return new Response(JSON.stringify({ message: "No notifications to send" }), {
+      headers: { "Content-Type": "application/json" },
+    })
+  }
+
+  // 4. Send Emails
+  const results = await Promise.all(
+    data.map(async ({ id, email, message }) => {
+      try {
+        await resend.emails.send({
+          from: "notifications@yourdomain.com", // TODO - update domain
+          to: email,
+          subject: "Appointment Reminder",
+          text: message,
+        })
+
+        await supabase.from("email_notifications").delete().eq("id", id)
+        return { id, status: "Email sent successfully" }
+      } catch (err) {
+        console.error(`Resend error for notification ${id}:`, err)
+        return { id, status: "Failed to send Email" }
+      }
+    }),
+  )
+
+  return new Response(JSON.stringify({ notifications: results }), {
+    headers: { "Content-Type": "application/json" },
+  })
+})
+```
+
+### Supabase edge function `sms-reminder`
+
+```ts
+import "jsr:@supabase/functions-js/edge-runtime.d.ts"
+import { createClient } from "jsr:@supabase/supabase-js@2"
+import { Twilio } from "npm:twilio"
+
+console.info("sms reminder started")
+
+Deno.serve(async req => {
+  // 1. Initialize Supabase client with service role
+  const supabaseUrl = Deno.env.get("SUPABASE_URL")
+  const supabaseKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")
+  if (!supabaseUrl || !supabaseKey) return new Response("Missing Supabase credentials", { status: 500 })
+  const supabase = createClient(supabaseUrl, supabaseKey)
+
+  // 2. Get Twilio credentials
+  const accountSid = Deno.env.get("TWILIO_ACCOUNT_SID")
+  const authToken = Deno.env.get("TWILIO_ACCOUNT_TOKEN")
+  const fromPhone = Deno.env.get("TWILIO_PHONE_NUMBER")
+  if (!accountSid || !authToken || !fromPhone) return new Response("Missing Twilio credentials", { status: 500 })
+
+  const twilioClient = new Twilio(accountSid, authToken)
+
+  // 3. Find notifications
+  const now = new Date()
+  const inThirtyMinutes = new Date(now.getTime() + 30 * 60 * 1000)
+
+  const { data, error } = await supabase
+    .from("sms_notifications")
+    .select("id, phone, message")
+    .lte("scheduled_for", inThirtyMinutes.toISOString())
+    .gte("scheduled_for", now.toISOString())
+
+  if (error) {
+    console.error("Supabase query error:", error)
+    return new Response("Failed to fetch notifications", { status: 500 })
+  }
+
+  if (!data?.length) {
+    return new Response(JSON.stringify({ message: "No notifications to send" }), {
+      headers: { "Content-Type": "application/json" },
+    })
+  }
+
+  // 4. Send SMS
+  const results = await Promise.all(
+    data.map(async ({ id, phone, message }) => {
+      try {
+        await twilioClient.messages.create({ body: message, from: fromPhone, to: phone })
+        await supabase.from("sms_notifications").delete().eq("id", id)
+        return { id, status: "SMS sent successfully" }
+      } catch (err) {
+        console.error(`Twilio error for notification ${id}:`, err)
+        return { id, status: "Failed to send SMS" }
+      }
+    }),
+  )
+
+  return new Response(JSON.stringify({ notifications: results }), {
+    headers: { "Content-Type": "application/json" },
+  })
+})
+```
+
+SUPABASE_URL
+SUPABASE_ANON_KEY
+SUPABASE_SERVICE_ROLE_KEY
+
+RESEND_SECRET
+
+TWILIO_ACCOUNT_SID
+TWILIO_ACCOUNT_TOKEN
+TWILIO_PHONE_NUMBER
