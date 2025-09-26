@@ -1,7 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
-import { createClient } from "@supabase/supabase-js"
+import { useEffect } from "react"
 import Calendar from "react-calendar"
 import "react-calendar/dist/Calendar.css"
 import moment from "moment-timezone"
@@ -53,7 +52,7 @@ function generateAvailableTimes(businessHours: BusinessHours, bookedTimes: momen
 }
 
 type BusinessHours = {
-  [key: string]: { opens: string; closes: string }
+  [key: string]: { opens: string; closes: string } | null
 }
 
 type CalendarContainerProps = {
@@ -83,6 +82,7 @@ export default function CalendarContainer({
   const { editingId, appointments, error, setEditingId, setAppointments, setError, setUserId, resetInputs } =
     useAppointmentStore()
   const { selectedDate, setSelectedDate, selectedTime, setSelectedTime } = useAppointmentStore()
+  const { selectedTimezone } = useAppointmentStore()
 
   moment.tz.setDefault(defaultTimezone ?? "Europe/London")
 
@@ -114,9 +114,9 @@ export default function CalendarContainer({
   const validateFirstName = (name: string) =>
     /^[a-zA-Z]{0,16}$/.test(name) ? "" : "Name must be 16 chars max, letters only"
 
-  // 2. Validate phone (max 17 chars, + and 0-9)
+  // 2. Validate phone (min 10 digits)
   const validatePhone = (phone: string) =>
-    /^\+?[0-9 ]{0,16}$/.test(phone) ? "" : "Phone must be 17 chars max, numbers, spaces and + only"
+    phone.replace(/\D/g, "").length < 10 ? "Please enter a valid phone number" : ""
 
   const validateVehicle = (name: string) =>
     /^[a-zA-Z0-9-]{0,32}$/.test(name) ? "" : "Vehicle must be 32 chars max, letters, digits, and '-' only"
@@ -128,8 +128,9 @@ export default function CalendarContainer({
   }
 
   const handlePhoneChange = (value: string) => {
-    setPhone(value)
-    setPhoneError(validatePhone(value))
+    const formatted = formatPhoneNumber(value)
+    setPhone(formatted)
+    setPhoneError(validatePhone(formatted))
   }
 
   const handleVehicleChange = (value: string) => {
@@ -146,7 +147,7 @@ export default function CalendarContainer({
   const handleBook = async () => {
     // 1. Validate inputs
     if (!firstName || !phone) return setError("First name and phone required")
-    if (firstNameError || phoneError || appointmentNoteError) return setError("Please fix input errors")
+    if (firstNameError || phoneError || appointmentNoteError || vehicleError) return setError("Please fix input errors")
     // 2. Validate date is not in the past
     const selected = moment(selectedDate).startOf("day")
     const today = moment().startOf("day")
@@ -156,12 +157,22 @@ export default function CalendarContainer({
     const appointmentId = editingId || crypto.randomUUID()
 
     if (editingId) {
-      const cancelAppt = await cancelAppointmentFn(
-        appointmentId,
-        defaultTimezone,
-        businessOwnerEmail,
-        businessOwnerPhone,
-      )
+      const originalAppt = appointments.find(appt => appt.id === editingId)
+      if (!originalAppt) return setError("Appointment not found")
+      const hasChanges =
+        selectedDate !== originalAppt.date ||
+        selectedTime !== originalAppt.time ||
+        firstName !== originalAppt.first_name ||
+        phone !== originalAppt.phone ||
+        (email || "") !== (originalAppt.email || "") ||
+        (appointmentNote || "") !== (originalAppt.note || "") ||
+        selectedTimezone !== originalAppt.timezone
+
+      if (!hasChanges) {
+        setEditingId(null)
+        return
+      }
+      const cancelAppt = await cancelAppointmentFn(appointmentId, defaultTimezone, businessOwnerPhone)
       if (!cancelAppt?.ok) return
 
       const response = await bookAppointmentFn(appointmentId, defaultTimezone, businessOwnerPhone)
@@ -234,6 +245,39 @@ export default function CalendarContainer({
   const minDate = new Date(today.getFullYear(), today.getMonth(), today.getDate())
   const maxDate = new Date(today.getFullYear(), today.getMonth(), today.getDate())
   maxDate.setDate(maxDate.getDate() + maxBookingDaysInAdvance)
+
+  // 5. Handle phone input key events
+  const handlePhoneKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    // Allow: backspace, delete, tab, escape, enter, home, end, left, right
+    if ([8, 9, 27, 13, 46, 35, 36, 37, 39].includes(e.keyCode)) return
+    // Allow Ctrl+A, Ctrl+C, Ctrl+V, Ctrl+X
+    if ((e.keyCode === 65 || e.keyCode === 67 || e.keyCode === 86 || e.keyCode === 88) && e.ctrlKey) return
+    // Ensure that it is a number and stop the keypress
+    if ((e.shiftKey || e.keyCode < 48 || e.keyCode > 57) && (e.keyCode < 96 || e.keyCode > 105)) {
+      e.preventDefault()
+    }
+  }
+  // 1. Format phone number with mask +XX XXX XXX XX XX
+  const formatPhoneNumber = (value: string): string => {
+    // Remove all non-digits
+    const digits = value.replace(/\D/g, "")
+
+    // If empty, return +44 prefix
+    if (digits.length === 0) return "+44 "
+
+    // Start with +44 if user hasn't provided country code
+    let formattedDigits = digits.startsWith("44") ? digits : "44" + digits
+
+    // Format as +XX XXX XXX XX XX
+    if (formattedDigits.length <= 2) return `+${formattedDigits}`
+    if (formattedDigits.length <= 5) return `+${formattedDigits.slice(0, 2)} ${formattedDigits.slice(2)}`
+    if (formattedDigits.length <= 8)
+      return `+${formattedDigits.slice(0, 2)} ${formattedDigits.slice(2, 5)} ${formattedDigits.slice(5)}`
+    if (formattedDigits.length <= 10)
+      return `+${formattedDigits.slice(0, 2)} ${formattedDigits.slice(2, 5)} ${formattedDigits.slice(5, 8)} ${formattedDigits.slice(8)}`
+
+    return `+${formattedDigits.slice(0, 2)} ${formattedDigits.slice(2, 5)} ${formattedDigits.slice(5, 8)} ${formattedDigits.slice(8, 10)} ${formattedDigits.slice(10, 12)}`
+  }
 
   return (
     <div className="w-full max-w-4xl mx-auto bg-foreground p-6 rounded-lg">
@@ -433,6 +477,7 @@ export default function CalendarContainer({
           type="tel"
           value={phone}
           tabIndex={3}
+          onKeyDown={handlePhoneKeyDown}
           onChange={e => handlePhoneChange(e.target.value)}
           placeholder={phonePlaceholder}
         />
@@ -533,7 +578,8 @@ export default function CalendarContainer({
           !phone ||
           !!firstNameError ||
           !!phoneError ||
-          !!appointmentNoteError
+          !!appointmentNoteError ||
+          !!vehicleError
         }>
         {editingId ? "Update" : "Book"}
       </button>
