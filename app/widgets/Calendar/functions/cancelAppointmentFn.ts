@@ -5,13 +5,9 @@ import { deleteSMSNtfcnAction } from "../actions/deleteSMSNtfcnAction"
 import { sendImmediateSMSAction } from "../actions/sendImmediateSMSAction"
 import { sendEmailAction } from "../actions/sendEmailAction"
 import { deleteEmailNtfcnAction } from "../actions/deleteEmailNtfcnAction"
+import { deleteDBAppointmentAction } from "../actions/deleteDBAppointmentAction"
 
-export async function cancelAppointmentFn(
-  id: string,
-  timezone: string,
-  businessEmail: string | undefined,
-  sendNotificationTo?: string,
-) {
+export async function cancelAppointmentFn(id: string, timezone: string, organizatorPhone?: string) {
   const { setError } = useAppointmentStore.getState()
   const { selectedDate, selectedTime, selectedTimezone } = useAppointmentStore.getState()
   const { firstName, phone, vehicle, email, appointmentNote } = useAppointmentStore.getState()
@@ -21,8 +17,8 @@ export async function cancelAppointmentFn(
   try {
     if (!selectedDate) throw Error("It's no selected date")
     if (!selectedTime) throw Error("It's no selected time")
-    if (!businessEmail) throw Error("Add a business email - so email about cancellation will be sent")
-    if (!sendNotificationTo) throw Error("Add a business phone number - so SMS about rebooking will be sent")
+    if (!organizatorPhone)
+      throw Error("Add a business (organizator) phone number - so SMS about rebooking will be sent")
 
     let message = formatedDateTimeFn("❌ canceled", selectedDate, selectedTime, selectedTimezone)
     message += `First name: ${firstName}\n`
@@ -33,17 +29,21 @@ export async function cancelAppointmentFn(
 
     const subject = `Appointment ❌ canceled with ${firstName} at ${selectedDate}`
 
-    // 1. Notify about cancellation with insta email
+    // 1. Delete appointment
+    const deleteApptResp = await deleteDBAppointmentAction(id)
+    if (typeof deleteApptResp === "string") throw Error(deleteApptResp)
+
+    // 2. Notify about cancellation with insta email
     const sendEmailResp = await sendEmailAction(message, subject, selectedDate, atTimezone, email)
     if (typeof sendEmailResp === "string") throw Error(sendEmailResp)
-    // 1.2 Notify about cancellation with insta SMS
-    const notifyResp = await sendImmediateSMSAction(sendNotificationTo, message)
+    // 2.2 Notify about cancellation with insta SMS
+    const notifyResp = await sendImmediateSMSAction(organizatorPhone, message)
     if (typeof notifyResp === "string" && notifyResp.includes("Failed")) throw Error(notifyResp)
 
-    // 2. Remove old SMS notification
+    // 3. Remove old SMS notification
     const deleteSMSNtfcnResp = await deleteSMSNtfcnAction(id)
     if (typeof deleteSMSNtfcnResp === "string" && deleteSMSNtfcnResp.includes("Error")) throw Error(deleteSMSNtfcnResp)
-    // 2.1 Remove old Email notification
+    // 3.1 Remove old Email notification
     const deleteResp = await deleteEmailNtfcnAction(id)
     if (typeof deleteResp === "string" && deleteResp.includes("Error")) throw Error(deleteResp)
 
