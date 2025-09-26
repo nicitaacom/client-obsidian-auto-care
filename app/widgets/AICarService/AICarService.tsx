@@ -349,7 +349,7 @@ export function AICarService() {
         {step === 3 && (
           <motion.div
             key="step3"
-            className="bg-foreground rounded-md p-4 border border-border-color flex flex-col h-[90vh]"
+            className="flex flex-col bg-foreground rounded-md p-4 border border-border-color"
             variants={stepVariants}
             custom={direction}
             initial="hidden"
@@ -368,6 +368,7 @@ export function AICarService() {
                 transition={{ duration: 0.26 }}>
                 {beforeImage && afterImage ? (
                   <ReactCompareSlider
+                    className="h-[50vh]"
                     itemOne={
                       <ReactCompareSliderImage
                         className="object-contain object-center"
