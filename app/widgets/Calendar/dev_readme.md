@@ -1,5 +1,12 @@
 You might need:
 
+env.local
+
+```
+RESEND_SECRET='' # domain.com
+NEXT_PUBLIC_EMAIL_FROM_DOMAIN=''
+```
+
 - update notification server action `sendEmailAction` according to client needs
 
 Supabase SQL:

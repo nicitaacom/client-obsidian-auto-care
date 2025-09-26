@@ -19,6 +19,7 @@ declare global {
       TWILIO_PHONE_NUMBER: string
 
       RESEND_SECRET: string
+      NEXT_PUBLIC_EMAIL_FROM_DOMAIN: string
     }
   }
 }

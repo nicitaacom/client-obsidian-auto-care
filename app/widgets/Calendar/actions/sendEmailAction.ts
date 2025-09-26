@@ -7,7 +7,6 @@ export async function sendEmailAction(
   subject: string,
   selectedDate: string | null,
   atMSK: string,
-  emailFrom: string,
   emailTo: string | undefined,
 ) {
   const resend = new Resend(process.env.RESEND_SECRET)
@@ -16,7 +15,7 @@ export async function sendEmailAction(
   if (!emailTo) return "it's no emailTo to send email"
 
   await resend.emails.send({
-    from: emailFrom,
+    from: `notifications@${process.env.NEXT_PUBLIC_EMAIL_FROM_DOMAIN}`,
     to: emailTo,
     subject: subject,
     html: `

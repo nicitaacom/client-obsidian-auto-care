@@ -10,12 +10,7 @@ import { sendImmediateSMSAction } from "../actions/sendImmediateSMSAction"
 import { scheduleEmailNtfcnAction } from "../actions/scheduleEmailNtfcnAction"
 import { insertDBAppointmentAction } from "../actions/insertDBAppointmentAction"
 
-export async function bookAppointmentFn(
-  appointmentId: string,
-  timezone: string,
-  organizatorEmail: string | undefined,
-  organizatorPhone: string | undefined,
-) {
+export async function bookAppointmentFn(appointmentId: string, timezone: string, organizatorPhone: string | undefined) {
   const { userId } = useAppointmentStore.getState()
   const { setNextStep, setError } = useAppointmentStore.getState()
   const { selectedDate, selectedTime, selectedTimezone } = useAppointmentStore.getState()
@@ -31,7 +26,6 @@ export async function bookAppointmentFn(
   try {
     if (!selectedDate) throw Error("It's no selected date")
     if (!selectedTime) throw Error("It's no selected time")
-    if (!organizatorEmail) throw Error("Add a business email - so email about a new booking will be sent")
     if (!organizatorPhone) throw Error("Add a business phone - so SMS about a new booking will be sent")
 
     let message = formatedDateTimeFn("🗓️ booked", selectedDate, selectedTime, selectedTimezone)
@@ -44,7 +38,7 @@ export async function bookAppointmentFn(
     const subject = `New Booking - ${selectedDate}`
 
     // 1. Notify about a new booking with insta email
-    const sendEmailResp = await sendEmailAction(message, subject, selectedDate, atTimezone, organizatorEmail, email)
+    const sendEmailResp = await sendEmailAction(message, subject, selectedDate, atTimezone, email)
     if (typeof sendEmailResp === "string") throw Error(sendEmailResp)
     // 1.2 Notify about new booking with insta SMS
     const notifyResp = await sendImmediateSMSAction(organizatorPhone, message)
@@ -64,7 +58,7 @@ export async function bookAppointmentFn(
       message,
       selectedDate,
       atTimezone,
-      organizatorEmail,
+
       appointmentId,
     )
     if (typeof emailNtfcnResp === "string") throw Error(emailNtfcnResp)

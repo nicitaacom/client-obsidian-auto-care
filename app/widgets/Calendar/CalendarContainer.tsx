@@ -164,7 +164,7 @@ export default function CalendarContainer({
       )
       if (!cancelAppt?.ok) return
 
-      const response = await bookAppointmentFn(appointmentId, defaultTimezone, businessOwnerEmail, businessOwnerPhone)
+      const response = await bookAppointmentFn(appointmentId, defaultTimezone, businessOwnerPhone)
       if (typeof response === "object") {
         setAppointments(
           appointments.map(appt =>
@@ -175,7 +175,7 @@ export default function CalendarContainer({
         resetInputs()
       }
     } else {
-      const response = await bookAppointmentFn(appointmentId, defaultTimezone, businessOwnerEmail, businessOwnerPhone)
+      const response = await bookAppointmentFn(appointmentId, defaultTimezone, businessOwnerPhone)
       if (typeof response === "object") {
         setAppointments([...appointments, response])
         resetInputs()

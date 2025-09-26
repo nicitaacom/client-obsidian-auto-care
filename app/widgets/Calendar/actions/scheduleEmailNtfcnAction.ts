@@ -5,11 +5,9 @@ import moment from "moment-timezone"
 
 const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL, process.env.SUPABASE_SERVICE_ROLE_KEY)
 
-function validateInputs(message: string, selectedDate: string | null, at: string, email?: string): string | null {
+function validateInputs(message: string, selectedDate: string | null, at: string): string | null {
   if (!message) return "Message is required"
   if (!selectedDate) return "You need to select a date"
-  if (!email) return "Business email is required for email notification"
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return "Invalid email format"
   if (!at) return "Time is required"
   return null
 }
@@ -18,11 +16,11 @@ export async function scheduleEmailNtfcnAction(
   message: string,
   selectedDate: string | null,
   appointment_at: string,
-  organizatorEmail?: string,
+
   appointmentId?: string,
 ): Promise<void | string> {
   // 1. Validate inputs
-  const validationError = validateInputs(message, selectedDate, appointment_at, organizatorEmail)
+  const validationError = validateInputs(message, selectedDate, appointment_at)
   if (validationError) return validationError
 
   const date = Array.isArray(selectedDate) ? selectedDate[0] : selectedDate
@@ -40,7 +38,7 @@ export async function scheduleEmailNtfcnAction(
   const { error: insertError } = await supabase.from("email_notifications").insert({
     id: notificationId,
     appointment_id: appointmentId,
-    email: organizatorEmail,
+    email: `notifications@${process.env.NEXT_PUBLIC_EMAIL_FROM_DOMAIN}`,
     message,
     scheduled_for: scheduledFor.toISOString(),
   })

@@ -34,7 +34,7 @@ export async function cancelAppointmentFn(
     const subject = `Appointment ❌ canceled with ${firstName} at ${selectedDate}`
 
     // 1. Notify about cancellation with insta email
-    const sendEmailResp = await sendEmailAction(message, subject, selectedDate, atTimezone, businessEmail, email)
+    const sendEmailResp = await sendEmailAction(message, subject, selectedDate, atTimezone, email)
     if (typeof sendEmailResp === "string") throw Error(sendEmailResp)
     // 1.2 Notify about cancellation with insta SMS
     const notifyResp = await sendImmediateSMSAction(sendNotificationTo, message)

@@ -22,7 +22,7 @@ export async function contactUsAction(firstName: string, phone: string, message:
 
   try {
     await resend.emails.send({
-      from: businessInfo.email,
+      from: `notifications@${process.env.NEXT_PUBLIC_EMAIL_FROM_DOMAIN}`,
       to: businessInfo.email,
       subject: `New form submission`,
       html: `
