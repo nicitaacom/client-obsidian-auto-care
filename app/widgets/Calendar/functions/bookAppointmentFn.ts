@@ -54,21 +54,15 @@ export async function bookAppointmentFn(appointmentId: string, timezone: string,
     )
     if (typeof smsNtfcnResp === "string") throw Error(smsNtfcnResp)
     // 2.2 schedule Email reminder
-    const emailNtfcnResp = await scheduleEmailNtfcnAction(
-      message,
-      selectedDate,
-      atTimezone,
-
-      appointmentId,
-    )
+    const emailNtfcnResp = await scheduleEmailNtfcnAction(message, selectedDate, atTimezone, appointmentId)
     if (typeof emailNtfcnResp === "string") throw Error(emailNtfcnResp)
 
     const appointmentObj: IDBAppointment = {
       id: appointmentId,
       created_at: moment().toISOString(),
-      date: selectedDate,
+      date: process.env.NODE_ENV === "development" ? today.toISOString() : selectedDate,
+      time: process.env.NODE_ENV === "development" ? moment().add(2, "minutes").format("HH:mm:ss") : selectedTime,
       user_id: userId,
-      time: selectedTime,
       timezone: selectedTimezone,
       first_name: firstName,
       email: email,

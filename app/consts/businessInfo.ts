@@ -3,7 +3,7 @@ export const businessInfo = {
   name: "Obsidian Auto Care",
   yearsInBusiness: 1, // numeric for easy usage in UI
   yearsOfGuarantee: null, // for example guarantee for ceramic coating
-  phone: "+44 795 526 56 63", // 38 41 it's her personal phone so she would like to receive SMS on 22 40
+  phone: process.env.NODE_ENV === "development" ? "+49 170 389 02 59" : "+44 795 526 56 63", // 38 41 it's her personal phone so she would like to receive SMS on 22 40
   timezone: "Europe/London",
   email: "info@obsidianautocare.com",
   websiteUrl: "https://obsidianautocare.com",
@@ -184,4 +184,13 @@ If yes - remove that "Need 24/7?" from footer
 should I add some additional section with examples of your work or should I keep it as is?
 
 Answer: 
+
+
+
+
+
+-------------------------------
+
+send them a msg in WA with next steps
+
 */

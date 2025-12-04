@@ -68,7 +68,7 @@ CREATE TABLE sms_notifications (
   phone text NOT NULL,
   appointment_id uuid NOT NULL,
   message text NOT NULL,
-  scheduled_for timestamp with time zone NOT NULL
+  scheduled_for timestamptz NOT NULL
 );
 
 
@@ -85,7 +85,7 @@ CREATE TABLE email_notifications (
   email text NOT NULL,
   appointment_id uuid NOT NULL,
   message text NOT NULL,
-  scheduled_for timestamp with time zone NOT NULL
+  scheduled_for timestamptz NOT NULL
 );
 
 

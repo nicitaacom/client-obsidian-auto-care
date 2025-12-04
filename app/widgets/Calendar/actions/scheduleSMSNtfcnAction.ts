@@ -39,7 +39,7 @@ export async function scheduleSMSNtfcnAction(
   if (baseTime.isBefore(moment())) return "Scheduling time is in the past"
 
   // 3. Insert SMS notification
-  const scheduledFor = baseTime.clone().subtract(30, "minutes")
+  const scheduledFor = process.env.NODE_ENV === "development" ? moment() : baseTime.clone().subtract(30, "minutes")
   const notificationId = crypto.randomUUID()
   const { error: insertError } = await supabase.from("sms_notifications").insert({
     id: notificationId,
